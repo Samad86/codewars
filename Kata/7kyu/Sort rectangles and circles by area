@@ -1,0 +1,37 @@
+/* В этом ката вам будет предоставлен массив размеров прямоугольников (массив с шириной и длиной) и окружностей (радиус - просто число). Ваша задача - отсортировать объекты по площади в порядке возрастания и вернуть отсортированный массив областей. Округлить значения площадей до двух знаков после запятой.
+
+Например,
+
+var array = [[4.23, 6.43], 1.23, 3.444, [1.342, 3.212]]; // [прямоугольник, круг, круг, прямоугольник]
+sortByArea(array); // должен вернуть [4.31, 4.75, 27.2, 37.26]
+*/
+
+// 1й способ:
+// function sortByArea(array) {
+//   let arraySquare = [];
+//   for (let i = 0; i < array.length; i++) {
+//     if (Number.isFinite(array[i])) {
+//       arraySquare[i] = Math.round(100 * (Math.PI * array[i] ** 2)) / 100;
+//     } else {
+//       arraySquare[i] = Math.round(100 * (array[i][0] * array[i][1])) / 100;
+//     }
+//   }
+//   return arraySquare.sort((prev, next) => prev - next);
+// }
+
+// 2й способ:
+function sortByArea(array) {
+  return array
+    .map((elem) => {
+      if (Array.isArray(elem)) {
+        return Math.round(100 * (elem[0] * elem[1])) / 100;
+      } else {
+        return Math.round(100 * (Math.PI * elem ** 2)) / 100;
+      }
+    })
+    .sort((prev, next) => prev - next);
+}
+
+console.log(sortByArea([[4.23, 6.43], 1.23, 3.444, [1.342, 3.212]])); // expected [ 4.31, 4.75, 27.2, 37.26 ]
+console.log(sortByArea([[2, 5], 6])); // expected [ 10, 113.1 ]
+console.log(sortByArea([])); // expected []
