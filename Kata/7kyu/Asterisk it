@@ -1,0 +1,35 @@
+/* Задача:
+
+Вам дана функция, которая должна вставлять звездочку (*) между каждой парой четных цифр в указанном входе и возвращать ее в виде строки. Если вход представляет собой последовательность, объедините элементы сначала в виде строки.
+
+Input:
+Входные данные могут быть целым числом, строкой цифр или последовательностью, содержащей только целые числа.
+
+Output:
+Вернуть строку.
+
+Примеры:
+5312708 -> "531270 * 8"
+«0000» -> «0 * 0 * 0 * 0»
+[1, 4, 64] -> «14 * 6 * 4»
+Повеселись!
+*/
+
+function asteriscIt(n) {
+  let str = (n + "").replace(/,/g, "").split("");
+  for (let i = 0; i < str.length; i++) {
+    if (str[i] % 2 == 0 && str[i + 1] % 2 == 0) {
+      str[i] += "*";
+    }
+  }
+  return str.join("");
+}
+
+console.log(asteriscIt(5312708)); // expected '531270*8'
+console.log(asteriscIt(9682135)); // expected ''96*8*2135'
+console.log(asteriscIt(2222)); // expected '2*2*2*2'
+console.log(asteriscIt(9999)); // expected '9999'
+console.log(asteriscIt("0000")); // expected '0*0*0*0'
+console.log(asteriscIt(8)); // expected '8'
+console.log(asteriscIt(0)); // expected '0'
+console.log(asteriscIt([1, 4, 64, 68, 67, 23, 1])); // expected '14*6*4*6*8*67231'
