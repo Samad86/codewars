@@ -1,0 +1,75 @@
+/* Добро пожаловать в бар Codewars!
+В баре Codewars рекомендуется выпивать 1 стакан воды на стандартный напиток, чтобы завтра утром не было похмелья.
+
+Твои коллеги-программисты сегодня вечером купили тебе несколько напитков в виде струны. Верните строку, указывающую, сколько стаканов воды следует выпить, чтобы не было похмелья.
+
+Пример вечеринки:
+Input 0:
+"1 пиво"
+
+Output 0:
+"1 стакан воды"
+
+Объяснение 0:
+Вы выпили один стандартный напиток
+
+Input 1:
+«1 выстрел, 5 сортов пива, 2 выстрела, 1 стакан вина, 1 пиво»
+
+Output 1:
+"10 стаканов воды"
+
+Объяснение 1:
+Вы выпили десять стандартных напитков
+
+Замечания:
+
+Для простоты, мы будем считать, что любая «пронумерованная вещь» в строке - это напиток. Даже "1 медведь" => "1 стакан воды" или "1 бензопила и 2 бассейна" => "3 стакана воды" ...
+*/
+
+// 1й способ:
+// function hydrate(s) {
+//   let drinks = s.split("");
+//   let hydrateSum = 0;
+
+//   for (let i = 0; i < drinks.length; i++) {
+//     if (Number.isInteger(+drinks[i])) hydrateSum += +drinks[i];
+//   }
+
+//   hydrateSum <= 1
+//     ? (hydrateSum += " glass of water")
+//     : (hydrateSum += " glasses of water");
+
+//   return hydrateSum;
+// }
+
+// 2й способ:
+// function hydrate(s) {
+//   let drinks = s.split("");
+//   let hydrateSum = 0;
+
+//   drinks.forEach((elem) => {
+//     if (Number.isInteger(+elem)) hydrateSum += +elem;
+//   });
+
+//   hydrateSum <= 1
+//     ? (hydrateSum += " glass of water")
+//     : (hydrateSum += " glasses of water");
+
+//   return hydrateSum;
+// }
+
+// 3й способ:
+function hydrate(s) {
+  let hydrateSum = [...s]
+    .filter((elem) => !isNaN(+elem))
+    .reduce((sum, num) => {
+      return sum + +num;
+    }, 0);
+
+  return `${hydrateSum} glass${hydrateSum == 1 ? "" : "es"} of water`;
+}
+
+console.log(hydrate("1 beer")); // expected "1 glass of water"
+console.log(hydrate("2 glasses of wine and 1 shot")); // expected "3 glasses of water"
+console.log(hydrate("1 shot, 5 beers, 2 shots, 1 glass of wine, 1 beer")); // expected "10 glasses of water"
