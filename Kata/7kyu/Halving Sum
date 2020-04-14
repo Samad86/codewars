@@ -1,0 +1,35 @@
+/* Задача
+Учитывая положительное целое число n, вычислите следующую сумму:
+
+n + n / 2 + n / 4 + n / 8 + ....
+Все элементы суммы являются результатами целочисленного деления.
+
+пример
+25 => 25 + 12 + 6 + 3 + 1 = 47
+ */
+
+function halvingSum(n) {
+  // let sum = 0;
+  // let i = 2;
+  
+  // 1й способ:
+  // while (n / i >= 1) {
+  //   sum += Math.floor(n / i);
+  //   i *= 2;
+  // }
+  // return n + sum;
+
+  // 2й способ:
+  // for (let i = 2; i < n; i *= 2) {
+  //   sum += Math.floor(n / i);
+  // }
+
+  // return n + sum;
+  
+  // 3й способ:
+  return n != 1 ? n + halvingSum(Math.floor(n / 2)) : n;
+}
+
+console.log(halvingSum(9)); // expected 16 = 9 + 4 + 2 + 1
+console.log(halvingSum(25)); // expected 47 = 25 + 12 + 6 + 3 + 1
+console.log(halvingSum(127)); // expected 247 = 127 + 63 + 31 + 15 + 7 + 3 + 1
