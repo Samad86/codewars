@@ -1,0 +1,15 @@
+/* Напишите функцию reverse, которая переворачивает массив (или, в случае clojure, любую структуру данных, подобную списку)
+
+(выделенные встроенные функции отключены)
+*/
+
+reverse = function (array) {
+  let reversed = [];
+  for (let i = array.length - 1; i >= 0; i--) {
+    reversed.push(array[i]);
+  }
+  return reversed;
+};
+
+console.log(reverse([1, 2, 3])); // expected [3, 2, 1]
+console.log(reverse([1, null, 14, "two"])); // ["two", 14, null, 1]
