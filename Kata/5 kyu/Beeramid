@@ -1,0 +1,37 @@
+/* Давайте представим, что ваша компания только что наняла вашего друга из колледжа и выплатила вам реферальный бонус. Потрясающие! Чтобы отпраздновать это, вы отправляете свою команду в ужасный дайв-бар по соседству и используете реферальный бонус, чтобы купить и построить самую большую трехмерную пирамиду пива, которую вы можете. А потом, вероятно, выпить это пиво, потому что давайте представим, что это тоже пятница.
+
+Пирамида пивных банок будет квадратить количество банок на каждом уровне - 1 банка на верхнем уровне, 4 на втором, 9 на следующем, 16, 25 ...
+
+Завершите функцию beeramid, чтобы получить количество завершенных уровней пирамиды пивных банок, которые вы можете сделать, учитывая параметры:
+
+1) ваш реферальный бонус, и
+
+2) цена пивной банки
+
+Например:
+
+бирамида (1500, 2); // должен === 12
+бирамида (5000, 3); // должен === 16
+*/
+
+var beeramid = function (bonus, price) {
+  let countBottles = 0;
+  let level = 0;
+  if (bonus / price < 0) return 0;
+  while (bonus / price >= countBottles) {
+    countBottles += level ** 2;
+    level++;
+    if (bonus / price < countBottles + level ** 2) return level - 1;
+  }
+};
+
+console.log(beeramid(9, 2)); // expected 1
+console.log(beeramid(10, 2)); // expected 2
+console.log(beeramid(11, 2)); // expected 2
+console.log(beeramid(21, 1.5)); // expected 3
+console.log(beeramid(454, 5)); // expected 5
+console.log(beeramid(455, 5)); // expected 6
+console.log(beeramid(4, 4)); // expected 1
+console.log(beeramid(3, 4)); // expected 0
+console.log(beeramid(0, 4)); // expected 0
+console.log(beeramid(-1, 4)); // expected 0
