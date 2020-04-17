@@ -1,0 +1,29 @@
+/* Завершите решение так, чтобы функция разбила верблюжий корпус, используя пробел между словами.
+
+пример
+solution("CamelCasing") == "Camel Casing"
+*/
+
+// 1й вариант:
+// function solution(string) {
+//   let res = string
+//     .split("")
+//     .map((elem) => {
+//       if (elem === elem.toUpperCase()) elem = " " + elem;
+//       return elem;
+//     })
+//     .join("");
+//   return res;
+// }
+
+// 2й вариант:
+function solution(string) {
+  //return string.replace(/([A-Z])/g, " $1");
+
+  //return string.replace(/([a-z])([A-Z])/g, "$1 $2");
+
+  return string.replace(/[A-Z]/g, " $&");
+}
+
+console.log(solution("camelCasing")); // expected "camel Casing"
+console.log(solution("camelCasingTest")); // expected "camel Casing Test"
