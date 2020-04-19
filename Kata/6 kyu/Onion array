@@ -1,0 +1,52 @@
+/* Задача:
+Есть луковый массив - это массив, который удовлетворяет следующему условию для всех значений j и k:
+
+Если все следующее верно:
+
+j> = 0
+k> = 0
+j + k = array.length - 1
+j! = k
+
+затем:
+
+a [j] + a [k] <= 10
+
+Примеры:
+[1, 2, 19, 4, 5] => true (т.к. 1 + 5 <= 10 и 2 + 4 <= 10)
+[1, 2, 19, 4, 10] => false (т.к. 1 + 10> 10)
+Напишите функцию с именем isOnionArray / IsOnionArray / is_onion_array (), которая возвращает true, если ее аргумент является луковым массивом, или возвращает false, если это не так.
+*/
+
+// 1й способ:
+// function isOnionArray(arr) {
+//   let count = 1;
+//   let j = 0;
+//   let k = arr.length - 1;
+//   while (j < k) {
+//     if (arr[j] + arr[k] <= 10) {
+//       count++;
+//       j++;
+//       k--;
+//     } else {
+//       count = 0;
+//       break;
+//     }
+//   }
+
+//   if (count) return true;
+//   else return false;
+// }
+
+// 2й способ:
+function isOnionArray(arr) {
+  for (let i = 0, j = arr.length - 1; i < j / 2; i++) {
+    if (arr[i] + arr[j - i] > 10) return false;
+  }
+  return true;
+}
+
+console.log(isOnionArray([6, 0, 4])); // expected true
+console.log(isOnionArray([1, 1, 15, 10, -1])); // expected false
+console.log(isOnionArray([1, 2, 19, 4, 5])); // expected true
+console.log(isOnionArray([1, 2, 19, 4, 10])); // expected false
