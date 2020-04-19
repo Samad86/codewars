@@ -1,0 +1,54 @@
+/* Задача:
+Если в качестве входных данных положительное целое число, вернуть выходные данные в виде строки в следующем формате:
+
+Каждый элемент, соответствующий цифре числа, умножается на степень 10 таким образом, что с суммой этих элементов вы можете получить исходное число.
+
+Input: 0
+Output: ""
+
+Input: 56
+Output: "5*10+6"
+
+Input: 60
+Output: "6*10"
+
+Input: 999
+Output: "9*100+9*10+9"
+
+Input: 10004
+Output: "1*10000+4"
+*/
+
+function simplify(number) {
+  let n = 1;
+  while (number / 10 ** n >= 1) {
+    n++;
+  }
+
+  let arr = number.toString().split("");
+
+  let output = [];
+  let j = n - 1;
+
+  for (i = 0; i < arr.length; i++) {
+    if (arr[i] == 0) {
+      j--;
+      continue;
+    }
+    if (arr[i] * 10 ** j == arr[i]) {
+      output.push(`${arr[i]}`);
+      continue;
+    }
+    output.push(`${arr[i]}*${10 ** j}`);
+    j--;
+  }
+
+  return output.join("+");
+}
+
+console.log(simplify(8964631)); // expected "8*1000000+9*100000+6*10000+4*1000+6*100+3*10+1"
+console.log(simplify(660)); // expected "6*100+6*10"
+console.log(simplify(56)); // expected "5*10+6"
+console.log(simplify(600)); // expected "6*100"
+console.log(simplify(10104)); // expected "1*10000+1*100+4"
+console.log(simplify(9090)); // expected "9*1000+9*10"
