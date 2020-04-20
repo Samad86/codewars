@@ -1,0 +1,43 @@
+/* Напишите функцию, которая принимает массив / список чисел и возвращает число.
+
+Посмотрите примеры и попробуйте угадать шаблон:
+
+EvenOdd ([1,2,6,1,6,3,1,9,6]) => 393
+EvenOdd ([1,2,3]) => 5
+EvenOdd ([0,2,3]) => 3
+EvenOdd ([1,0,3]) => 3
+EvenOdd ([3,2]) => 6
+*/
+
+// 1й вариант:
+// function EvenOdd(arr) {
+//   let output = arr[0];
+//   let i = 0;
+
+//   while (i < arr.length) {
+//     i++;
+//     if (i == arr.length) return output;
+//     output *= arr[i];
+//     i++;
+//     if (i == arr.length) return output;
+//     output += arr[i];
+//   }
+
+//   return output;
+// }
+
+// 2й вариант:
+function EvenOdd(arr) {
+  let output = arr.reduce(
+    (acc, elem, i) => (i % 2 ? acc * elem : acc + elem),
+    0
+  );
+
+  return output;
+}
+
+console.log(EvenOdd([1, 2, 2, 1, 6, 1, 3, 9, 6, 1])); // expected 123
+console.log(EvenOdd([1, 2, 6, 1, 6, 3, 1, 9, 6])); // expected 393
+console.log(EvenOdd([1, 2, 3])); // expected 5
+console.log(EvenOdd([0, 2, 3])); // expected 3
+console.log(EvenOdd([3, 2])); // expected 6
