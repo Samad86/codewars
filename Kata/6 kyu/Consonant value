@@ -1,0 +1,41 @@
+/* Если задана строчная строка, состоящая только из буквенных символов и без пробелов, вернуть наибольшее значение согласных подстрок. Согласные - это любые буквы алфавита, кроме «aeiou».
+
+Мы присвоим следующие значения: a = 1, b = 2, c = 3, .... z = 26.
+
+Например, для слова "zodiacs" давайте вычеркнем гласные. Мы получаем: "Z O D IA CS"
+
+- Согласные подстроки: «z», «d» и «cs», а значения: z = 26, d = 4 и cs = 3 + 19 = 22. Максимальное значение - 26.
+solve("zodiacs") = 26
+
+Для слова «strength» solve("strength") = 57
+- Согласные подстроки: «str» и «ngth» со значениями «str» = 19 + 20 + 18 = 57 и «ngth» = 14 + 7 + 20 + 8 = 49. Максимальное значение 57.
+Для C: не изменяйте ввод.
+
+Больше примеров в тестовых случаях. Удачи!
+*/
+
+function solve(s) {
+  let arr = s.replace(/[aeiou]/g, ",").split(",").map((elem) => elem.split(""));
+
+  let arrSum = [];
+  let sumRes = 0;
+  for (let i = 0; i < arr.length; i++) {
+    for (let j = 0; j < arr[i].length; j++) {
+      sumRes += arr[i][j].charCodeAt(0) - 96;
+    }
+    arrSum[i] = sumRes;
+    sumRes = 0;
+  }
+
+  let output = arrSum.sort((prev, next) => prev - next);
+
+  return output[output.length - 1];
+}
+
+console.log(solve("zodiacs")); // expected 26
+console.log(solve("chruschtschov")); // expected 80
+console.log(solve("khrushchev")); // expected 38
+console.log(solve("strength")); // expected 57
+console.log(solve("catchphrase")); // expected 73
+console.log(solve("twelfthstreet")); // expected 103
+console.log(solve("mischtschenkoana")); // expected 80
