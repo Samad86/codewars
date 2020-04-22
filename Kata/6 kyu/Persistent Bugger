@@ -1,0 +1,34 @@
+/* Напишите функцию persistence, которая принимает положительный параметр num и возвращает его мультипликативное постоянство, которое является количеством раз, которое вы должны умножить на цифры num, пока не достигнете одной цифры.
+
+Например:
+
+  persistence(39) === 3 // потому что 3 * 9 = 27, 2 * 7 = 14, 1 * 4 = 4
+                        // и 4 имеет только одну цифру
+
+  persistence(999) === 4 // потому что 9 * 9 * 9 = 729, 7 * 2 * 9 = 126,
+                         // 1 * 2 * 6 = 12 и, наконец, 1 * 2 = 2
+
+  persistence(4) === 0 // потому что 4 уже однозначное число
+*/
+
+function persistence(num) {
+  let arr = num.toString().split("");
+  if (arr.length == 1) return 0;
+
+  let count = 1;
+  let prod = 1;
+
+  do {
+    prod = arr.reduce((acc, elem) => acc * elem, 1);
+    if (prod < 10) return count;
+    count++;
+    arr = prod.toString().split("");
+  } while (prod >= 10);
+
+  return count;
+}
+
+console.log(persistence(39)); // expected 3
+console.log(persistence(999)); // expected 4
+console.log(persistence(25)); // expected 2
+console.log(persistence(4)); // expected 0
