@@ -1,0 +1,29 @@
+/* По заданному массиву найдите целое число, которое встречается нечетное количество раз.
+
+Всегда будет только одно целое число, которое встречается нечетное количество раз.
+*/
+
+// 1й способ:
+// function findOdd(A) {
+//   let indices = [];
+//   for (let i = 0; i < A.length; i++) {
+//     let idx = A.indexOf(A[i]);
+//     while (idx != -1) {
+//       indices.push(idx);
+//       idx = A.indexOf(A[i], idx + 1);
+//     }
+//     if (indices.length % 2 != 0) return A[i];
+//   }
+// }
+
+// 2й способ:
+function findOdd(A) {
+  return A.find((elem) => A.filter((item) => item == elem).length % 2);
+}
+
+console.log(findOdd([20, 1, -1, 2, -2, 3, 3, 5, 5, 1, 2, 4, 20, 4, -1, -2, 5])); // expected 5
+console.log(findOdd([1, 1, 2, -2, 5, 2, 4, 4, -1, -2, 5])); // expected -1
+console.log(findOdd([20, 1, 1, 2, 2, 3, 3, 5, 5, 4, 20, 4, 5])); // expected 5
+console.log(findOdd([10])); // expected 10
+console.log(findOdd([1, 1, 1, 1, 1, 1, 10, 1, 1, 1, 1])); // expected 10
+console.log(findOdd([5, 4, 3, 2, 1, 5, 4, 3, 2, 10, 10])); // expected 1
