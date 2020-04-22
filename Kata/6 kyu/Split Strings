@@ -1,0 +1,35 @@
+/* Завершите решение так, чтобы оно разбивало строку на пары из двух символов. Если строка содержит нечетное количество символов, тогда следует заменить отсутствующий второй символ последней пары подчеркиванием ('_').
+
+Примеры:
+
+solution('abc') // должно вернуть ['ab', 'c_']
+solution('abcdef') // должно вернуть ['ab', 'cd', 'ef']
+*/
+
+// 1й способ:
+// function solution(str) {
+//   let output = [];
+//   let arr = str.split("");
+//   for (let i = 0; i < arr.length; i += 2) {
+//     if (arr.length % 2 == 0) output.push(arr[i] + arr[i + 1]);
+//     else {
+//       arr.push("_");
+//       output.push(arr[i] + arr[i + 1]);
+//     }
+//   }
+//   return output;
+// }
+
+// 2й способ:
+// function solution(str) {
+//   return (str.length % 2 ? str + "_" : str).match(/../g);
+// }
+
+// 3й способ:
+function solution(str) {
+  return (str + "_").match(/../g);
+}
+
+console.log(solution("abcdef")); // expected ["ab", "cd", "ef"]
+console.log(solution("abcdefg")); // expected ["ab", "cd", "ef", "g_"]
+console.log(solution("")); // expected []
