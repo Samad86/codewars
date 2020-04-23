@@ -1,0 +1,35 @@
+/* Панграм - это предложение, которое содержит каждую букву алфавита хотя бы один раз. Например, предложение «Быстрая коричневая лиса перепрыгивает через ленивую собаку» - это панграм, потому что она использует буквы A-Z хотя бы один раз (регистр не имеет значения).
+
+По заданной строке определите, является ли она панграмом. Верните true, если это так, false, если нет. Игнорировать цифры и знаки препинания.
+*/
+
+// 1й вариант:
+// function isPangram(string) {
+//   return /(?=.*a)(?=.*b)(?=.*c)(?=.*d)(?=.*e)(?=.*f)(?=.*g)(?=.*h)(?=.*i)(?=.*j)(?=.*k)(?=.*l)(?=.*m)(?=.*n)(?=.*o)(?=.*p)(?=.*q)(?=.*r)(?=.*s)(?=.*t)(?=.*u)(?=.*v)(?=.*w)(?=.*x)(?=.*y)(?=.*z)/gi.test(
+//     string
+//   );
+// }
+
+// 2й вариант:
+// function isPangram(string) {
+//   string = string.toLowerCase();
+//   return "abcdefghijklmnopqrstuvwxyz"
+//     .split("")
+//     .every((x) => string.indexOf(x) != -1);
+// }
+
+// 3й вариант:
+function isPangram(string) {
+  return "abcdefghijklmnopqrstuvwxyz"
+    .split("")
+    .every((x) => string.toLowerCase().includes(x));
+}
+
+console.log(isPangram("The quick brown fox jumps over the lazy dog.")); // expected true
+console.log(isPangram("This is not a pangram.")); // expected false
+console.log(
+  isPangram(
+    "A pangram is a sentence that contains every single letter of the alphabet at least once."
+  )
+); // expected false
+console.log(isPangram("AbCdEfGhIjKlM zYxWvUtSrQpOn")); // expected true
