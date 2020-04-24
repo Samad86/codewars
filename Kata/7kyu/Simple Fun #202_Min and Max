@@ -1,0 +1,55 @@
+/* Задача:
+Вам даны три целых числа l, d и x. Ваша задача:
+
+• определить минимальное целое число n
+     такой, что l ≤ n ≤ d, а сумма его цифр равна x.
+• определить максимальное целое число м
+     такой, что l ≤ m ≤ d, а сумма его цифр равна x.
+Гарантируется, что такие числа всегда существуют.
+
+Input/Output:
+[input] целое число л
+
+[input] целое число d
+
+1 ≤ l ≤ d ≤ 10000.
+
+[input] целое число х
+
+1 ≤ x ≤ 36
+
+[output] целочисленный массив
+
+Массив из двух элементов, где первый элемент равен n, а второй - m.
+
+Пример:
+Для l = 500, d = 505, x = 10 выходной сигнал должен быть [505, 505].
+
+Для l = 100, d = 200, x = 10 выход должен быть [109, 190].
+*/
+
+function minAndMax(l, d, x) {
+  let arr = [];
+  let sum = 0;
+  let output = [];
+  for (let i = l; i <= d; i++) {
+    arr = i.toString().split("");
+    sum = arr.reduce((acc, elem) => acc + +elem, 0);
+    if (sum == x) output.push(+arr.join(""));
+  }
+  if (output.length == 1) {
+    output[1] = output[0];
+    return output;
+  }
+  return [output[0], output[output.length - 1]];
+}
+
+console.log(minAndMax(500, 505, 10)); // expected [505, 505]
+console.log(minAndMax(100, 200, 10)); // expected [109, 190]
+console.log(minAndMax(123, 456, 5)); // expected [131, 410]
+console.log(minAndMax(99, 501, 5)); // expected [104, 500]
+console.log(minAndMax(99, 234, 1)); // expected [100, 100]
+console.log(minAndMax(99, 234, 19)); // expected [199, 199]
+console.log(minAndMax(99, 5001, 27)); // expected [999, 4995]
+console.log(minAndMax(99, 5001, 28)); // expected [1999, 4996]
+console.log(minAndMax(2000, 7000, 3)); // expected [2001, 3000]
