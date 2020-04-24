@@ -1,0 +1,33 @@
+/* В этом Ката вам будет предоставлен массив уникальных элементов, и ваша задача - переупорядочить значения так, чтобы за первым максимальным значением следовал первый минимум, затем второе максимальное значение, затем второе минимальное значение и т. д.
+
+Например:
+
+solve([15,11,10,7,12]) = [15,7,12,10,11]
+Первый максимум равен 15, а первый минимум равен 7. Второй максимум равен 12, а второй минимум равен 10 и так далее.
+
+Больше примеров в тестовых примерах.
+
+Удачи!
+*/
+
+function solve(arr) {
+  let output = [];
+  let arrNew = [...arr];
+  while (output.length != arr.length) {
+    arrNew.sort((prev, next) => prev - next);
+    output.push(arrNew[arrNew.length - 1]);
+    arrNew.splice(-1, 1);
+    if (output.length == arr.length) return output;
+    arrNew.sort((prev, next) => next - prev);
+    output.push(arrNew[arrNew.length - 1]);
+    arrNew.splice(-1, 1);
+  }
+  return output;
+}
+
+console.log(solve([15, 11, 10, 7, 12])); // expected [15, 7, 12, 10, 11]
+console.log(solve([91, 75, 86, 14, 82])); // expected [91, 14, 86, 75, 82]
+console.log(solve([84, 79, 76, 61, 78])); // expected [84, 61, 79, 76, 78]
+console.log(solve([52, 77, 72, 44, 74, 76, 40])); // expected [77, 40, 76, 44, 74, 52, 72]
+console.log(solve([1, 6, 9, 4, 3, 7, 8, 2])); // expected [9, 1, 8, 2, 7, 3, 6, 4]
+console.log(solve([78, 79, 52, 87, 16, 74, 31, 63, 80])); // expected [87, 16, 80, 31, 79, 52, 78, 63, 74]
