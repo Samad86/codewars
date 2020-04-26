@@ -24,8 +24,14 @@ shuffleIt ([1,2,3,4,5], [1,2], [3,4], [2,3]) должен вернуть [1,3,5,
 // };
 
 // 2й способ:
+// let shuffleIt = (arr, ...indArr) => {
+//   for ([a, b] of indArr) [arr[a], arr[b]] = [arr[b], arr[a]];
+//   return arr;
+// };
+
+// 3й способ:
 let shuffleIt = (arr, ...indArr) => {
-  for ([a, b] of indArr) [arr[a], arr[b]] = [arr[b], arr[a]];
+  indArr.forEach(([i, j]) => [arr[i], arr[j]] = [arr[j], arr[i]]);
   return arr;
 };
 
