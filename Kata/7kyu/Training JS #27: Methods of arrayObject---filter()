@@ -1,0 +1,60 @@
+/* Задача:
+Кодирование в функции `` `countGrade```. Функция принимает 1 параметр `` `Score```, это числовой массив. Ваша задача - подсчитать распределение оценок по баллам, чтобы получить объект, подобный этому:
+`` `Javascript
+{S: 888, A: 888, B: 888, C: 888, D: 888, X: 888}
+`` `
+Правила оценки:
+`` `
+Оценка S: Полный балл (оценка = 100)
+Оценка А: оценка < 100 и оценка >= 90
+Оценка B: оценка < 90 и оценка >= 80
+Оценка C: оценка < 80 и оценка >= 60
+Оценка D: оценка < 60 и оценка >= 0
+Оценка X: оценка = -1 (обманщик получает такую ​​оценку)
+`` `
+
+Пример:
+`` `
+countGrade ([50, 60, 70, 80, 90, 100]) должен вернуть {S: 1, A: 1, B: 1, C: 2, D: 1, X: 0}
+countGrade ([65, 75, 85, 85, 95, 100, 100]) должен вернуть {S: 2, A: 1, B: 2, C: 2, D: 0, X: 0}
+countGrade ([- 1, -1, -1, -1, -1, -1]) должен вернуть {S: 0, A: 0, B: 0, C: 0, D: 0, X: 6}
+`` `
+*/
+
+// 1й способ:
+// function countGrade(scores) {
+//   let gradeObj = {
+//     S: 0,
+//     A: 0,
+//     B: 0,
+//     C: 0,
+//     D: 0,
+//     X: 0,
+//   };
+//   scores.filter((mark) => {
+//     if (mark == 100) gradeObj.S++;
+//     if (mark >= 90 && mark < 100) gradeObj.A++;
+//     if (mark >= 80 && mark < 90) gradeObj.B++;
+//     if (mark >= 60 && mark < 80) gradeObj.C++;
+//     if (mark >= 0 && mark < 60) gradeObj.D++;
+//     if (mark == -1) gradeObj.X++;
+//   });
+//   return gradeObj;
+// }
+
+// 2й способ:
+function countGrade(scores) {
+  let gradeObj = {
+    S: scores.filter((mark) => mark == 100).length,
+    A: scores.filter((mark) => mark >= 90 && mark < 100).length,
+    B: scores.filter((mark) => mark >= 80 && mark < 90).length,
+    C: scores.filter((mark) => mark >= 60 && mark < 80).length,
+    D: scores.filter((mark) => mark >= 0 && mark < 60).length,
+    X: scores.filter((mark) => mark == -1).length,
+  };
+  return gradeObj;
+}
+
+console.log(countGrade([50, 60, 70, 80, 90, 100])); // expected {S:1, A:1, B:1, C:2, D:1, X:0}
+console.log(countGrade([65, 75, 85, 85, 95, 100, 100])); // expected {S:2, A:1, B:2, C:2, D:0, X:0}
+console.log(countGrade([-1, -1, -1, -1, -1, -1])); // expected {S:0, A:0, B:0, C:0, D:0, X:6}
