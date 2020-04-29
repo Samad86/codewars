@@ -1,0 +1,57 @@
+/* Задача:
+Кодирование в функции `` `rndCode```. Ваша задача - сгенерировать случайный код подтверждения. В соответствии со следующими правилами:
+
+1) длина кода должна быть 8;
+
+2) 1-й и 2-й символы должны состоять из двух заглавных букв. Диапазон "A B C D E F G H I J K L M".
+
+3) 3-6-й символы должны быть четырьмя числами.
+
+4) 7-й и 8-й символы должны быть двумя символами. Диапазон "~ ! @ # $ % ^ & *".
+
+5) Если ваш код выполняется 100 раз, он должен сгенерировать 100 неповторяющихся кодов проверки.
+
+Несколько действительных примеров кода подтверждения:
+`` `
+AB1234#$ MG6145$@ KJ2249@&
+CD5678%^ IG7593~% FH8638@&
+EF9012!@ GB7047%$ KD7604^%
+`` `
+*/
+
+// 1й способ:
+// function rndCode() {
+//   let chars = [126, 33, 64, 35, 36, 37, 94, 38, 42];
+//   return (
+//     String.fromCharCode(65 + ~~((77 - 65) * Math.random())) +
+//     String.fromCharCode(65 + ~~((77 - 65) * Math.random())) +
+//     ~~(10 * Math.random()) +
+//     ~~(10 * Math.random()) +
+//     ~~(10 * Math.random()) +
+//     ~~(10 * Math.random()) +
+//     String.fromCharCode(chars[~~(chars.length * Math.random())]) +
+//     String.fromCharCode(chars[~~(chars.length * Math.random())])
+//   );
+// }
+
+// 2й способ:
+function rndCode() {
+  let code = "";
+  let chars = [126, 33, 64, 35, 36, 37, 94, 38, 42];
+
+  for (let i = 0; i < 2; i++) {
+    code += String.fromCharCode(65 + ~~((77 - 65) * Math.random()));
+  }
+
+  for (let i = 0; i < 4; i++) {
+    code += ~~(10 * Math.random());
+  }
+
+  for (let i = 0; i < 2; i++) {
+    code += String.fromCharCode(chars[~~(chars.length * Math.random())]);
+  }
+
+  return code;
+}
+
+console.log(rndCode());
