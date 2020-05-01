@@ -1,0 +1,44 @@
+/* Задача:
+Кодирование в функции `` `findSimilarity```. функция принимает два параметра: `` `str``` - предложение содержит несколько слов, разделенных пробелами; `` `word``` - образец слова.
+
+Ваша задача - сохранить слова, которые похожи на пример слова, и удалить другие слова.
+
+Сходство определяется так: та же длина, что и у образца; буква в начале и в конце слова совпадает с образцом.
+
+Если в предложении нет похожих слов, следует вернуть пустую строку.
+
+Некоторые примеры:
+`` `
+findSimilarity("bag dog dig dot doog dogs", "dog") должна возвращать "dog dig"
+findSimilarity("bag dog dig dot doog dogs", "dig") должна возвращать "dog dig"
+findSimilarity("bag dog dig dot doog dogs","dot") должен возвращать "dot"
+findSimilarity("bag dog dig dot doog dogs","god") должны возвращать ""
+`` `
+
+Подсказка: использование filter () облегчит вашу работу; Если вы не знаете, как решить ката, обратитесь к примерам урока.
+*/
+
+function findSimilarity(str, word) {
+  let regExpBegin = new RegExp(`^${word[0]}`);
+  let regExpEnd = new RegExp(`${word[word.length - 1]}$`);
+  return str
+    .split(" ")
+    .filter(
+      (elem) =>
+        regExpBegin.test(elem) &&
+        regExpEnd.test(elem) &&
+        elem.length == word.length
+    )
+    .join(" ");
+}
+
+console.log(findSimilarity("bag dog dig dot doog dogs", "dog")); // expected "dog dig"
+console.log(findSimilarity("bag dog dig dot doog dogs", "dig")); // expected "dog dig"
+console.log(findSimilarity("bag dog dig dot doog dogs", "dot")); // expected "dot"
+console.log(findSimilarity("bag dog dig dot doog dogs", "god")); // expected ""
+console.log(
+  findSimilarity(
+    "vRllN QRo cUz gdI SImLC fyQhN Gzi PWzja SxTdC VlQ SdmKC ImF",
+    "SWyfC"
+  )
+); // expected "SImLC SxTdC SdmKC"
