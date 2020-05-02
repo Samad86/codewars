@@ -1,0 +1,72 @@
+/* Задача:
+На этот раз вам нужно написать регулярное выражение, которое соответствует всем URL-адресам, содержащимся в строке.
+
+Правила:
+
+1) URL начинаются с `` `http:// или https://` ``
+
+2) URL заканчивается `` `.com``` или` `` .net```
+
+3) Средняя часть URL может использовать буквы, цифры и точки
+
+4) Необходимо игнорировать регистр, и строка может содержать несколько URL
+
+5) Ваше имя регулярного выражения должно быть `` `regex```, а ваш результат должен быть строковым массивом.
+
+Некоторые примеры:
+`` `
+"Http://codewars.com".match(regex) должен вернуть ['http://codewars.com']
+
+"Http://www.codewars.com".match(regex) должен вернуть ['http://www.codewars.com']
+
+"HTTP://CODEWARS.COM".match(regex) должен вернуть ['HTTP://CODEWARS.COM']
+
+"Https://www.codewars.com".match(regex) должен вернуть ['https://www.codewars.com']
+
+"Http://www.codewars.net".match(regex) должен вернуть ['http://www.codewars.net']
+
+"1234http: //www.codewars.comabcd".match(regex) должен вернуть ['http://www.codewars.com']
+
+"HTTP: //www.codewars1.com @ # $% HTTP: //www.codewars2.net".match(regex) должен вернуть ['http://www.codewars1.com', 'http://www.codewars2.net']
+
+"Http://www.codewars.com.net".match(regex) должен вернуть ['http://www.codewars.com.net']
+
+"HTTP: //www.codewars.com.fak".match(regex) должен вернуть ['http://www.codewars.com']
+
+Эти примеры должны возвращать ноль:
+"Ftp://www.codewars.com".match(regex)
+"HTTP://www.code#wars.com".match(regex)
+"HTTP:// wwwcodewarscom".match(regex)
+"Http://www.codewars.org".match(regex)
+"http:// www. codewars. com".match(regex)
+"HTTP://mail@codewars.com".match(regex)
+`` `
+
+Подсказка: чтобы соответствовать `` `" / "` `` и `` `". "` ``, Вы должны использовать `` `" \ / "` `` и `` `" \. "` ``
+`` `" \ "` `` - escape-символ, мы изучим его на следующем уроке.
+*/
+
+// 1й способ:
+//let regex = /https*:\/+\w+\.*\w+\.*\w*\.*\w*\.(com|net)+(\.net)*/gi;
+
+// 2й способ:
+let regex = /https?:\/\/[a-z0-9.]+\.(?:com|net)/gi;
+
+console.log("http://codewars.com".match(regex)); // expected ["http://codewars.com"]
+console.log("http://www.codewars.com".match(regex)); // expected ["http://www.codewars.com"]
+console.log("HTTP://CODEWARS.COM".match(regex)); // expected ["HTTP://CODEWARS.COM"]
+console.log("https://www.codewars.com".match(regex)); // expected ["https://www.codewars.com"]
+console.log("http://www.codewars.net".match(regex)); // expected ["http://www.codewars.net"]
+console.log("1234http://www.codewars.comabcd"); // expected ["http://www.codewars.com"]
+console.log(
+  "http://www.codewars1.com!@#$%http://www.codewars2.net".match(regex)
+); // expected ["http://www.codewars1.com", "http://www.codewars2.net"]
+console.log("http://www.codewars1.comabchttp://www.codewars2.net".match(regex)); // expected ["http://www.codewars1.com", "http://www.codewars2.net"]
+console.log("http://www.codewars.com.net".match(regex)); // expected ["http://www.codewars.com.net"]
+console.log("http://www.codewars.com.fak".match(regex)); // expected ["http://www.codewars.com"]
+console.log("ftp://www.codewars.com".match(regex)); // expected null
+console.log("http://www.code#wars.com".match(regex)); // expected null
+console.log("http://www.codewars.org".match(regex)); // expected null
+console.log("http://www . codewars . com".match(regex)); // expected null
+console.log("http://mail@codewars.com".match(regex)); // expected null
+console.log("http://.com".match(regex)); // expected null
