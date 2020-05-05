@@ -1,0 +1,55 @@
+/* Задача:
+Число 45 является первым целым числом, имеющим это интересное свойство: сумма числа с его обращенным делится на разницу между ними (абсолютное значение).
+
+45 + 54 = 99
+абс (45 - 54) = 9
+99 делится на 9.
+Первые члены этой специальной последовательности:
+
+n a (n)
+1 45
+2 54
+3 495
+4 594
+Создайте функцию sum_dif_rev () (sumDivRef в JavaScript и CoffeeScript), которая получает n, порядковый номер термина и может дать нам значение термина последовательности.
+
+sumDifRev (n) -----> a (n)
+Давайте посмотрим на некоторые случаи:
+
+sumDifRev (1) -----> 45
+sumDifRev (3) -----> 495
+Важное замечание: Все целые числа, для которых его обратное имеет ведущие нули, должны быть отброшены: например: 1890, его обратное значение равно 981 ("0981")
+
+Ваш код будет протестирован до первых 65 терминов, поэтому вам следует подумать об его оптимизации настолько, насколько это возможно.
+
+(Подсказка: я запоминаю, вы запоминаете, он запоминает ... они (конечно) запоминают)
+
+Удачного кодирования!
+*/
+
+function sumDifRev(n) {
+  let count = 0;
+  let num = 1;
+  while (count <= n) {
+    let numRev = Number(num.toString().split("").reverse().join(""));
+    if ((num + numRev) % Math.abs(num - numRev) == 0) {
+      count++;
+      if (num.toString()[num.toString().length - 1] == 0) count--;
+    }
+    if (count == n) return num;
+    num++;
+  }
+}
+
+console.log(sumDifRev(1)); // expected 45
+console.log(sumDifRev(2)); // expected 54
+console.log(sumDifRev(3)); // expected 495
+console.log(sumDifRev(4)); // expected 594
+console.log(sumDifRev(5)); // expected 4356
+console.log(sumDifRev(6)); // expected 4545
+console.log(sumDifRev(7)); // expected 4995
+console.log(sumDifRev(8)); // expected 5454
+console.log(sumDifRev(9)); // expected 5895
+console.log(sumDifRev(10)); // expected 5985
+console.log(sumDifRev(11)); // expected 5994
+console.log(sumDifRev(12)); // expected 6534
