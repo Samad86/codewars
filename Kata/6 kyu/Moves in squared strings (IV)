@@ -1,0 +1,108 @@
+/* Задача:
+Дана строка из n строк, каждая подстрока длиной n символов: Например:
+
+s = "abcd \n efgh \n ijkl \n mnop"
+
+Мы изучим некоторые преобразования этого квадрата строк.
+
+Симметрия относительно главной поперечной диагонали: diag_2_sym:
+diag_2_sym(s) => "plhd \n okgc \n njfb \n miea"
+Вращение против часовой стрелки на 90 градусов: счетчик rot_90:
+rot_90_counter(s) => "dhlp \n cgko \n bfjn \n aeim"
+selfie_diag2_counterclock - это начальная строка + строка, полученная симметрией относительно главной поперечной диагонали + вращение против часовой стрелки на 90 градусов:
+s = "abcd \n efgh \n ijkl \n mnop" ->
+"abcd | plhd | dhlp \n efgh | okgc | cgko \n ijkl | njfb | bfjn \n mnop | miea | aeim"
+или напечатано для последнего:
+selfie_diag2_counterclock
+abcd | plhd | dhlp
+efgh| okgc | cgko
+ijkl | njfb | bfjn
+mhop | МИЭА | aeim
+
+#Задача:
+
+Напишите эти функции diag_2_sym, rot_90_counter, selfie_diag2_counterclock
+А также функцию высшего порядка oper(fct, s), где
+
+fct - это функция одной переменной f, применяемая к строке s (fct будет иметь значение diag_2_sym, rot_90_counter, selfie_diag2_counterclock).
+
+#Примеры:
+
+s = "abcd\nefgh\nijkl\nmnop"
+oper(diag_2_sym, s) => "plhd\nokgc\nnjfb\nmiea"
+oper(rot_90_counter, s) => "dhlp\ncgko\nbfjn\naeim"
+oper(selfie_diag2_counterclock, s) => "abcd|plhd|dhlp\nefgh|okgc|cgko\nijkl|njfb|bfjn\nmnop|miea|aeim"
+*/
+
+function rot90Counter(strng) {
+  let arr = strng.split("\n");
+  let i = arr[0].length - 1;
+  let n = 0;
+  let res = [];
+  while (i >= 0) {
+    res[n] = "";
+    for (let k = 0; k < arr.length; k++) {
+      for (let j = i; j >= 0; j--) {
+        res[n] += arr[k][j];
+        break;
+      }
+    }
+    n++;
+    i--;
+  }
+  return res.join("\n");
+}
+
+function diag2Sym(strng) {
+  let arr = strng.split("\n");
+  let i = arr[0].length - 1;
+  let n = 0;
+  let res = [];
+  while (i >= 0) {
+    res[n] = "";
+    for (let k = arr.length - 1; k >= 0; k--) {
+      for (let j = i; j >= 0; j--) {
+        res[n] += arr[k][j];
+        break;
+      }
+    }
+    n++;
+    i--;
+  }
+  return res.join("\n");
+}
+
+function selfieDiag2Counterclock(strng) {
+  let arr = strng.split("\n");
+  let i = arr[0].length - 1;
+  let n = 0;
+  let res = [];
+  while (i >= 0) {
+    res[n] = "";
+    for (let k = arr.length - 1; k >= 0; k--) {
+      for (let j = i; j >= 0; j--) {
+        res[n] += arr[k][j];
+        break;
+      }
+    }
+    res[n] = arr[n] + "|" + res[n] + "|" + res[n].split("").reverse().join("");
+    n++;
+    i--;
+  }
+  return res.join("\n");
+}
+
+function oper(fct, s) {
+  return fct(s);
+}
+
+console.log(
+  oper(rot90Counter, "EcGcXJ\naaygcA\nNgIshN\nyOrCZE\neBEqpm\nNkxCgw")
+); // expected "JANEmw\nXchZpg\ncgsCqC\nGyIrEx\ncagOBk\nEaNyeN"
+console.log(oper(diag2Sym, "LmvLyg\nDKELBm\nylJhui\nXRXqHD\nzlisCT\nhPqxYb")); // expected "bTDimg\nYCHuBy\nxsqhLL\nqiXJEv\nPlRlKm\nhzXyDL"
+console.log(
+  oper(
+    selfieDiag2Counterclock,
+    "NJVGhr\nMObsvw\ntPhCtl\nsoEnhi\nrtQRLK\nzjliWg"
+  )
+); // expected "NJVGhr|gKilwr|rwliKg\nMObsvw|WLhtvh|hvthLW\ntPhCtl|iRnCsG|GsCnRi\nsoEnhi|lQEhbV|VbhEQl\nrtQRLK|jtoPOJ|JOPotj\nzjliWg|zrstMN|NMtsrz"
