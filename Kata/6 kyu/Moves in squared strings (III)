@@ -1,0 +1,97 @@
+/* Задача:
+Вам дана строка из n строк, каждая подстрока длиной n символов. Например:
+
+s = "abcd \n efgh \n ijkl \n mnop"
+
+Мы изучим некоторые преобразования этого квадрата строк.
+
+Симметрия относительно главной диагонали: diag_1_sym:
+diag_1_sym(s) => "aeim \n bfjn \n cgko \n dhlp"
+Поворот по часовой стрелке на 90 градусов: rot_90_clock:
+rot_90_clock(s) => "miea \n njfb \n okgc \n plhd"
+selfie_and_diag1(s) - это начальная строка + строка, полученная симметрией относительно главной диагонали.
+s = "abcd \n efgh \n ijkl \n mnop" ->
+"abcd | aeim \n efgh | bfjn \n ijkl | cgko \n mnop | dhlp"
+или напечатано для последнего:
+selfie_and_diag1
+abcd | aeim
+efgh | bfjn
+ijkl | cgko
+mnop | dhlp
+
+#Задача:
+
+Напишите эти функции diag_1_sym, rot_90_clock, selfie_and_diag1,
+а также функцию высшего порядка oper (fct, s), где
+
+fct - это функция одной переменной f, применяемая к строке s (fct будет одной из следующих: diag_1_sym, rot_90_clock, selfie_and_diag1)
+
+#Примеры:
+
+s = "abcd\nefgh\nijkl\nmnop"
+oper(diag_1_sym, s) => "aeim\nbfjn\ncgko\ndhlp"
+oper(rot_90_clock, s) => "miea\nnjfb\nokgc\nplhd"
+oper(selfie_and_diag1, s) => "abcd|aeim\nefgh|bfjn\nijkl|cgko\nmnop|dhlp"
+*/
+
+function rot90Clock(strng) {
+  let arr = strng.split("\n");
+  let i = 0;
+  let res = [];
+  while (i < arr[0].length) {
+    res[i] = "";
+    for (let k = arr.length - 1; k >= 0; k--) {
+      for (let j = i; j < arr[i].length; j++) {
+        res[i] += arr[k][j];
+        break;
+      }
+    }
+    i++;
+  }
+  return res.join("\n");
+}
+
+function diag1Sym(strng) {
+  let arr = strng.split("\n");
+  let i = 0;
+  let res = [];
+  while (i < arr[0].length) {
+    res[i] = "";
+    for (let k = 0; k < arr.length; k++) {
+      for (let j = i; j < arr[i].length; j++) {
+        res[i] += arr[k][j];
+        break;
+      }
+    }
+    i++;
+  }
+  return res.join("\n");
+}
+
+function selfieAndDiag1(strng) {
+  let arr = strng.split("\n");
+  let i = 0;
+  let res = [];
+  while (i < arr[0].length) {
+    res[i] = "";
+    for (let k = 0; k < arr.length; k++) {
+      for (let j = i; j < arr[i].length; j++) {
+        res[i] += arr[k][j];
+        break;
+      }
+    }
+    res[i] = arr[i] + "|" + res[i];
+    i++;
+  }
+  return res.join("\n");
+}
+
+function oper(fct, s) {
+  return fct(s);
+}
+
+console.log(oper(rot90Clock, "rgavce\nvGcEKl\ndChZVW\nxNWgXR\niJBYDO\nSdmEKb")); // expected "Sixdvr\ndJNCGg\nmBWhca\nEYgZEv\nKDXVKc\nbORWle"
+console.log(oper(diag1Sym, "wuUyPC\neNHWxw\nehifmi\ntBTlFI\nvWNpdv\nIFkGjZ")); // expected "weetvI\nuNhBWF\nUHiTNk\nyWflpG\nPxmFdj\nCwiIvZ"
+console.log(
+  oper(selfieAndDiag1, "NJVGhr\nMObsvw\ntPhCtl\nsoEnhi\nrtQRLK\nzjliWg")
+); // expected "NJVGhr|NMtsrz\nMObsvw|JOPotj\ntPhCtl|VbhEQl\nsoEnhi|GsCnRi\nrtQRLK|hvthLW\nzjliWg|rwliKg"
