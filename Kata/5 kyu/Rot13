@@ -1,0 +1,50 @@
+/* Задача:
+ROT13 - это простой шифр замещения букв, который заменяет букву буквой через 13 букв после нее в алфавите. ROT13 является примером шифра Цезаря.
+
+Создайте функцию, которая принимает строку и возвращает строку, зашифрованную с помощью Rot13. Если в строке есть числа или специальные символы, они должны быть возвращены как есть. Должны быть сдвинуты только буквы латинского алфавита, как в оригинальной «реализации» Rot13.
+*/
+
+// 1й способ:
+// function rot13(message) {
+//   let arr = message.split("");
+//   let res = [];
+//   for (let i = 0; i < arr.length; i++) {
+//     if (arr[i].charCodeAt() < 78 && arr[i].charCodeAt() >= 65) {
+//       res.push(String.fromCharCode(arr[i].charCodeAt() + 13));
+//       continue;
+//     } else if (arr[i].charCodeAt() <= 90 && arr[i].charCodeAt() >= 78) {
+//       res.push(String.fromCharCode(arr[i].charCodeAt() - 13));
+//       continue;
+//     }
+//     if (arr[i].charCodeAt() < 110 && arr[i].charCodeAt() >= 97) {
+//       res.push(String.fromCharCode(arr[i].charCodeAt() + 13));
+//       continue;
+//     } else if (arr[i].charCodeAt() <= 122 && arr[i].charCodeAt() >= 110) {
+//       res.push(String.fromCharCode(arr[i].charCodeAt() - 13));
+//       continue;
+//     } else res.push(arr[i]);
+//   }
+//   return res.join("");
+// }
+
+// 2й способ:
+function rot13(message) {
+  return message
+    .split("")
+    .map((elem) =>
+      elem.charCodeAt() < 78 && elem.charCodeAt() >= 65
+        ? String.fromCharCode(elem.charCodeAt() + 13)
+        : elem.charCodeAt() <= 90 && elem.charCodeAt() >= 78
+        ? String.fromCharCode(elem.charCodeAt() - 13)
+        : elem.charCodeAt() < 110 && elem.charCodeAt() >= 97
+        ? String.fromCharCode(elem.charCodeAt() + 13)
+        : elem.charCodeAt() <= 122 && elem.charCodeAt() >= 110
+        ? String.fromCharCode(elem.charCodeAt() - 13)
+        : elem
+    )
+    .join("");
+}
+
+console.log(rot13("test")); // expected "grfg"
+console.log(rot13("Test")); // expected "Grfg"
+console.log(rot13("!T1e2s3t?")); // expected "!G1r2f3g?"
