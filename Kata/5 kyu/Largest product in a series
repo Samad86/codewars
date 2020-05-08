@@ -1,0 +1,39 @@
+/* Задача:
+Завершите метод greatProduct, чтобы он нашел наибольшее произведение 5 последовательных цифр в данной строке цифр.
+
+Например:
+
+greatProduct("123834539327238239583") // должно вернуть 3240
+Входная строка всегда имеет более 5 цифр.
+
+Адаптировано из проекта Эйлера.
+*/
+
+// 1й способ:
+// function greatestProduct(input) {
+//   let arr = input.split("");
+//   let prod = [];
+//   for (let i = 0; i <= arr.length - 5; i++) {
+//     prod.push(arr[i] * arr[i + 1] * arr[i + 2] * arr[i + 3] * arr[i + 4]);
+//   }
+//   return prod.sort((prev, next) => next - prev)[0];
+// }
+
+// 2й способ:
+function greatestProduct(input) {
+  let arr = input.split("");
+  let max = 0;
+  for (let i = 0; i <= arr.length - 5; i++) {
+    max = Math.max(
+      max,
+      arr[i] * arr[i + 1] * arr[i + 2] * arr[i + 3] * arr[i + 4]
+    );
+  }
+  return max;
+}
+
+console.log(greatestProduct("123834539327238239583")); // expected 3240
+console.log(greatestProduct("92494737828244222221111111532909999")); // expected 5292
+console.log(greatestProduct("92494737828244222221111111532909999")); // expected 5292
+console.log(greatestProduct("92494737828244222221111111532909999")); // expected 5292
+console.log(greatestProduct("02494037820244202221011110532909999")); // expected 0
