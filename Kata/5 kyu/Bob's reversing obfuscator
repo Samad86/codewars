@@ -1,0 +1,64 @@
+/* Задача:
+Босс Кэрол Боб думает, что он очень умен. Он сказал ей, что создал приложение, которое делает сообщения нечитаемыми без изменения каких-либо букв, только путем добавления новых, сохраняя целостность сообщения (т.е. исходное сообщение все еще можно получить).
+
+Он дал ограниченный доступ к своему приложению Кэрол, чтобы бросить ей вызов, и намекнул, что, если Кэрол не сможет выполнить это простое задание, ее могут уволить.
+
+Кэрол пыталась взломать этот код сама, но слишком устала, поэтому пришла к вам за помощью. Однако ей удалось взломать приложение Боба и найти поле данных под названием "marker". Она думает, что это может помочь взломать приложение Боба.
+
+Помогите Кэрол сохранить ее работу!
+
+Особенности функции:
+Аргументы:
+encoded - закодированная строка, которую мы пытаемся вернуть в исходный вид.
+marker - короткая строка, используемая в процессе кодирования.
+Ожидаемое значение:
+Ваша функция должна декодировать и вернуть исходную строку.
+*/
+
+// 1й способ:
+// function decoder(encoded, marker) {
+//   let arr = encoded.split(marker);
+//   let output = [];
+//   for (let i = 0; i < arr.length; i++) {
+//     if (i % 2 == 0) output.push(arr[i]);
+//   }
+//   for (let i = arr.length - 1; i >= 0; i--) {
+//     if (i % 2 != 0) output.push(arr[i].split("").reverse().join(""));
+//   }
+//   return output.join("");
+// }
+
+// 2й способ:
+function decoder(encoded, marker) {
+  let arr = encoded.split(marker);
+  let begin = arr.filter((element, index) => index % 2 == 0).join("");
+  let end = arr
+    .filter((element, index) => index % 2 != 0)
+    .join("")
+    .split("")
+    .reverse("")
+    .join("");
+  return begin + end;
+}
+
+console.log(
+  decoder("Lor-.tile gnicsipida rutetcesnoc ,tema tis rolod muspi me", "-")
+); // expected "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+console.log(
+  decoder(
+    "Azq.subinifzqenean varzq odommoc zqius bibenzqsubicuaf zqdum odio.zqcenoD",
+    "zq"
+  )
+); // expected "Aenean varius bibendum odio. Donec faucibus commodo finibus."
+console.log(
+  decoder(
+    "qqqqAqq.qqliuaqqsutcqqm nulla dolor, varius eget aliuam sed, venenatis eu le",
+    "qq"
+  )
+); // expected "Aliuam nulla dolor, varius eget aliuam sed, venenatis eu lectus."
+console.log(
+  decoder(
+    "Ut viverra ex sed enii a:jm.eitseloi lev ierol des :jmliq:jmnasi:jmuet hendrerit. Done:jmucca c",
+    ":jm"
+  )
+); // expected "Ut viverra ex sed enii aliquet hendrerit. Donec accuisan sed lorei vel iolestie."
