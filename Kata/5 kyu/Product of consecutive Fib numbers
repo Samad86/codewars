@@ -1,0 +1,54 @@
+/* Задача:
+Числа Фибоначчи - это числа в следующей целочисленной последовательности (Fn):
+
+0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, ...
+
+Такие, как:
+
+F (n) = F (n-1) + F (n-2) с F (0) = 0 и F (1) = 1.
+
+Учитывая число, скажем, prod (произведение), мы ищем два числа Фибоначчи F(n) и F(n + 1), проверяя
+
+F(n) * F(n + 1) = prod
+
+Ваша функция productFib принимает целое число (prod) и возвращает массив:
+
+[F(n), F(n + 1), true], если F (n) * F (n + 1) = prod
+
+Если вы не найдете 2 последовательных F(m), проверяющих F(m) * F(m + 1) = prod, вы вернете:
+
+[F(m), F(m + 1), false]
+F(m) является наименьшим, например, F(m) * F(m + 1) > prod
+
+Некоторые примеры возврата:
+
+productFib(714) # должен вернуть [21, 34, true],
+                # так как F(8) = 21, F(9) = 34 и 714 = 21 * 34
+
+productFib(800) # должен вернуть [34, 55, false],
+                # поскольку F(8) = 21, F(9) = 34, F(10) = 55 и 21 * 34 < 800 < 34 * 55
+*/
+
+function productFib(prod) {
+  let arrFib = [];
+  let a = 0;
+  let b = 1;
+  arrFib.push(a);
+  for (let i = 3; i <= prod; i++) {
+    if (b <= prod) arrFib.push(b);
+    let c = a + b;
+    a = b;
+    b = c;
+    if (prod == a * b) return [a, b, prod == a * b];
+    if (prod < a * b) return [a, b, prod == a * b];
+  }
+}
+
+console.log(productFib(4895)); // expected [55, 89, true]
+console.log(productFib(5895)); // expected [89, 144, false]
+console.log(productFib(74049690)); // expected [6765, 10946, true]
+console.log(productFib(84049690)); // expected [10946, 17711, false]
+console.log(productFib(193864606)); // expected [10946, 17711, true]
+console.log(productFib(447577)); // expected [610, 987, false]
+console.log(productFib(602070)); // expected [610, 987, true]
+console.log(productFib(1574642)); // expected [987, 1597, false]
