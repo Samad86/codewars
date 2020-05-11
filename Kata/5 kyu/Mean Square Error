@@ -1,0 +1,34 @@
+/* Задача:
+Завершите функцию, которая принимает два целочисленных массива одинаковой длины,
+сравнивает значение каждого члена в одном массиве с соответствующим членом в другом,
+возводит в квадрат абсолютную разницу между этими двумя значениями
+и возвращает среднее значение этих квадратов разницы абсолютных значений между каждой парой элементов.
+
+Примеры:
+[1, 2, 3], [4, 5, 6] -> 9, потому что (9 + 9 + 9) / 3
+[10, 20, 10, 2], [10, 25, 5, -2] -> 16,5, потому что (0 + 25 + 25 + 16) / 4
+[-1, 0], [0, -1] -> 1, потому что (1 + 1) / 2
+*/
+
+// 1й способ:
+// var solution = function (firstArray, secondArray) {
+//   let sum = 0;
+//   for (let i = 0; i < firstArray.length; i++) {
+//     sum += Math.pow(Math.abs(firstArray[i] - secondArray[i]), 2);
+//   }
+//   return sum / firstArray.length;
+// };
+
+// 2й способ:
+var solution = function (firstArray, secondArray) {
+  return (
+    firstArray.reduce(
+      (sum, elem, i) => sum + Math.pow(Math.abs(elem - secondArray[i]), 2),
+      0
+    ) / firstArray.length
+  );
+};
+
+console.log(solution([1, 2, 3], [4, 5, 6])); // expected 9
+console.log(solution([10, 20, 10, 2], [10, 25, 5, -2])); // expected 16.5
+console.log(solution([0, -1], [-1, 0])); // expected 1
