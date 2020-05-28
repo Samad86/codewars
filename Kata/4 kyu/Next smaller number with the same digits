@@ -1,0 +1,61 @@
+/* Задача:
+Напишите функцию, которая принимает положительное целое число и возвращает следующее меньшее положительное целое число, содержащее те же цифры.
+
+Например:
+
+nextSmaller(21) == 12
+nextSmaller(531) == 513
+nextSmaller(2071) == 2017
+Верните -1 , когда нет меньшего числа, содержащего те же цифры. Также верните -1, когда следующее меньшее число с такими же цифрами потребует, чтобы начальная цифра была 0.
+
+nextSmaller(9) == -1
+nextSmaller(111) == -1
+nextSmaller(135) == -1
+nextSmaller(1027) == -1 // 0721 отсутствует, так как мы не пишем числа с ведущими нулями
+некоторые тесты будут включать очень большие числа.
+В тестовых данных используются только натуральные числа.
+*/
+
+function nextSmaller(n) {
+  let arr = n.toString().split("");
+  let val = 0;
+  let left = 0;
+  let right = 0;
+
+  for (let i = arr.length - 1; i >= 0; i--) {
+    if (arr[i] < arr[i - 1]) {
+      val = arr[i - 1];
+
+      for (let j = arr.length - 1; j >= i; j--) {
+        if (arr[j] < val) {
+          arr[i - 1] = arr[j];
+          arr[j] = val;
+          break;
+        }
+      }
+
+      left = arr.slice(0, i);
+      right = arr.slice(i).sort((prev, next) => next - prev);
+      break;
+    }
+  }
+
+  if (left == 0) return -1;
+
+  return left && right ? Number(left.join("") + right.join("")) : -1;
+}
+
+console.log(nextSmaller(21)); // expected 12
+console.log(nextSmaller(907)); // expected 790
+console.log(nextSmaller(531)); // expected 513
+console.log(nextSmaller(135)); // expected -1
+console.log(nextSmaller(2071)); // expected 2017
+console.log(nextSmaller(1027)); // expected -1
+console.log(nextSmaller(414)); // expected 144
+console.log(nextSmaller(123456798)); // expected 123456789
+console.log(nextSmaller(123456789)); // expected -1
+console.log(nextSmaller(1234567908)); // expected 1234567890
+console.log(nextSmaller(23238822)); // expected 23238282
+console.log(nextSmaller(41261275007)); // expected 41261270750
+console.log(nextSmaller(1143801144)); // expected 1143484110
+console.log(nextSmaller(6457)); // expected 5764
