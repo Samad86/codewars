@@ -1,0 +1,76 @@
+/* Задача:
+Если n - числитель, а d - знаменатель дроби, эта дробь определяется как (сокращенная) правильная дробь тогда и только тогда, когда НОД(n, d) == 1.
+
+Например, 5/16 - правильная дробь, а 6/16 - нет, поскольку и 6, и 16 делятся на 2, таким образом, дробь можно уменьшить до 3/8.
+
+Теперь, если вы рассмотрите данное число d, сколько правильных дробей можно построить, используя d в качестве знаменателя?
+
+Например, предположим, что d равно 15: вы можете построить с ним 8 различных правильных дробей от 0 до 1: 1/15, 2/15, 4/15, 7/15, 8/15, 11/15 13/15 и 14/15.
+
+Вы должны построить функцию, которая вычисляет, сколько правильных дробей вы можете построить с заданным знаменателем:
+
+properFractions(1) == 0
+properFractions(2) == 1
+properFractions(5) == 4
+properFractions(15) == 8
+properFractions(25) == 20
+
+Будьте готовы справиться с большими числами.
+*/
+
+// 1й способ:
+// function properFractions(n) {
+//   if (n == 1) return 0;
+
+//   let count = 1;
+//   let prod = n;
+
+//   for (let i = 1; i <= Math.ceil(Math.sqrt(n)); i++) {
+//     if (isPrime(i)) {
+//       if (prod % i == 0) {
+//         count *= i - 1;
+//         prod /= i;
+//         while (prod % i == 0) {
+//           count *= i;
+//           prod /= i;
+//         }
+//       }
+//     }
+//   }
+
+//   if (prod > 1) count *= prod - 1;
+
+//   return count;
+// }
+
+// function isPrime(num) {
+//   if (num == 1) return false;
+
+//   for (let i = 2; i <= Math.sqrt(num); i++) {
+//     if (num % i == 0) return false;
+//   }
+
+//   return true;
+// }
+
+// 2й способ:
+function properFractions(n) {
+  if (n == 1) return 0;
+  let count = n;
+  for (let i = 2; i <= Math.sqrt(n); ++i) {
+    if (n % i == 0) {
+      while (n % i == 0) n /= i;
+      count -= count / i;
+    }
+  }
+  if (n > 1) count -= count / n;
+  return count;
+}
+
+console.log(properFractions(1)); // expected 0
+console.log(properFractions(2)); // expected 1
+console.log(properFractions(5)); // expected 4
+console.log(properFractions(15)); // expected 8
+console.log(properFractions(25)); // expected 20
+console.log(properFractions(1532420)); // expected 608256
+console.log(properFractions(9999999)); // expected 6637344
