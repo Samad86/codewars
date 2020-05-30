@@ -1,0 +1,93 @@
+/* Задача:
+Учитывая строковые представления двух целых чисел, вернуть строковое представление суммы этих целых чисел.
+
+Например:
+
+sumStrings("1", "2") // => "3"
+
+Строковое представление целого числа не будет содержать символов, кроме десяти цифр от «0» до «9».
+*/
+
+// 1й способ:
+// function sumStrings(a, b) {
+//   if (!b) return a;
+
+//   let sum = "";
+
+//   let aLength = a.length;
+//   let bLength = b.length;
+
+//   let temp = 0;
+//   if (aLength < bLength) {
+//     temp = b;
+//     b = a;
+//     a = temp;
+//   }
+
+//   let carry = 0;
+//   let aDig = 0;
+//   let bDig = 0;
+//   let digitSum = 0;
+//   temp = 0;
+
+//   for (let i = 0; i < a.length; i++) {
+//     aDig = parseInt(a.charAt(a.length - 1 - i));
+//     bDig = parseInt(b.charAt(b.length - 1 - i));
+//     bDig = bDig ? bDig : 0;
+//     temp = (carry + aDig + bDig).toString();
+//     digitSum = temp.charAt(temp.length - 1);
+//     carry = parseInt(temp.substr(0, temp.length - 1));
+//     carry = carry ? carry : 0;
+
+//     sum = i == a.length - 1 ? temp + sum : digitSum + sum;
+//   }
+
+//   while (sum[0] == "0") sum = sum.slice(1);
+
+//   return sum;
+// }
+
+// 2й способ:
+function sumStrings(a, b) {
+  if (!b) return a;
+
+  if (a.length < b.length) while (a.length != b.length) a = "0" + a;
+  else if (b.length < a.length) while (a.length != b.length) b = "0" + b;
+
+  let sum = "";
+  let carry = 0;
+
+  for (let i = a.length - 1; i >= 0; i--) {
+    let aDig = +a[i];
+    let bDig = +b[i];
+    let innerSum = aDig + bDig + carry;
+
+    let placeNum = innerSum;
+    if (innerSum > 9) {
+      placeNum = innerSum % 10;
+      carry = Math.floor(innerSum / 10);
+    } else {
+      carry = "";
+    }
+    sum = placeNum + sum;
+  }
+
+  sum = carry + sum;
+
+  while (sum[0] == "0") sum = sum.slice(1);
+
+  return sum;
+}
+
+console.log(sumStrings("123", "456")); // expected "579"
+console.log(sumStrings("8797", "45")); // expected "8842"
+console.log(sumStrings("800", "9567")); // expected "10367"
+console.log(sumStrings("99", "1")); // expected "100"
+console.log(sumStrings("00103", "08567")); // expected "8670"
+console.log(sumStrings("5")); // expected "5"
+console.log(
+  sumStrings("712569312664357328695151392", "8100824045303269669937")
+); // expected "712577413488402631964821329"
+console.log(
+  sumStrings("50095301248058391139327916261", "81055900096023504197206408605")
+); // expected "131151201344081895336534324866"
