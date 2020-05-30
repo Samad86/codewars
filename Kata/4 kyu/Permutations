@@ -1,0 +1,61 @@
+/* Задача:
+В этой ката вы должны создать все перестановки входной строки и удалить дубликаты, если они есть. Это означает, что вы должны перетасовать все буквы из ввода во всех возможных порядках.
+
+Примеры:
+
+permutations("a"); // ["a"]
+permutations("ab"); // ["ab", "ba"]
+permutations("aabb"); // ["aabb", "abab", "abba", "baab", "baba", "bbaa"]
+
+Порядок перестановок не имеет значения.
+*/
+
+// 1й способ:
+// function permutations(string) {
+//   let res = [];
+//   let firstChar = "";
+//   let remainingChars = "";
+//   let innerPerm = [];
+//   let newStr = "";
+
+//   if (string.length == 0) {
+//     res.push(string);
+//     return res;
+//   }
+//   for (let i = 0; i < string.length; i++) {
+//     firstChar = string[i];
+//     remainingChars = string.substring(0, i) + string.substring(i + 1);
+//     innerPerm = permutations(remainingChars);
+
+//     for (let j = 0; j < innerPerm.length; j++) {
+//       newStr = firstChar + innerPerm[j];
+//       if (!res.includes(newStr)) res.push(newStr);
+//     }
+//   }
+//   return res;
+// }
+
+// 2й способ:
+function permutations(string) {
+  return string.length <= 1
+    ? [string]
+    : Array.from(
+        new Set(
+          string
+            .split("")
+            .map((char, i) =>
+              permutations(string.substr(0, i) + string.substr(i + 1)).map(
+                (perm) => char + perm
+              )
+            )
+            .reduce((acc, elem) => acc.concat(elem), [])
+        )
+      );
+}
+
+console.log(permutations("a")); // expected ["a"]
+console.log(permutations("aa")); // expected ["aa"]
+console.log(permutations("ab")); // expected ["ab", "ba"]
+console.log(permutations("aabb")); // expected ["aabb", "abab", "abba", "baab", "baba", "bbaa"]
+console.log(permutations("aaaab")); // expected ["aaaab", "aaaba", "aabaa", "abaaa", "baaaa"]
+console.log(permutations("abcd")); // expected ["abcd", "abdc", "acbd", "acdb", "adbc", "adcb", "bacd", "badc", "bcad", "bcda", "bdac", "bdca", "cabd", "cadb", "cbad", "cbda", "cdab", "cdba", "dabc", "dacb", "dbac", "dbca", "dcab", "dcba"]
