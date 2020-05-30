@@ -1,0 +1,68 @@
+/* Задача:
+Завершите решение так, чтобы оно удаляло весь текст, который следует за любым из переданных наборов маркеров комментариев. Любые пробелы в конце строки также должны быть удалены.
+
+Пример:
+
+Учитывая входную строку:
+
+apples, pears # and bananas
+grapes
+bananas !apples
+
+Ожидаемый результат будет:
+
+apples, pears
+grapes
+bananas
+
+Код будет называться так:
+
+var result = solution("apples, pears # and bananas\ngrapes\nbananas !apples", ["#", "!"])
+вернет "apples, pears\ngrapes\nbananas"
+*/
+
+// 1й способ:
+// function solution(input, markers) {
+//   return (
+//     input
+//       .split("")
+//       .slice(0, input.split("").indexOf(markers[0]) - 1)
+//       .join("") +
+//     input
+//       .split("")
+//       .slice(
+//         input.split("").indexOf("\n"),
+//         input.split("").indexOf(markers[1]) - 1
+//       )
+//       .join("")
+//   );
+// }
+
+// 2й способ:
+// function solution(input, markers) {
+//   return input.replace(
+//     new RegExp("\\s?[" + markers.join("") + "].*(\\n)?", "gi"),
+//     "$1"
+//   );
+// }
+
+// 3й способ:
+function solution(input, markers) {
+  let lines = input.split("\n");
+
+  for (let i = 0; i < lines.length; i++) {
+    for (var j = 0; j < markers.length; ++j) {
+      lines[i] = lines[i].split(markers[j])[0].trim();
+    }
+  }
+
+  return lines.join("\n");
+}
+
+console.log(
+  solution("apples, plums % and bananas\npears\noranges !applesauce", [
+    "%",
+    "!",
+  ])
+); // expected "apples, plums\npears\noranges"
+console.log(solution("Q @b\nu\ne -e f g", ["@", "-"])); // expected "Q\nu\ne"
