@@ -1,0 +1,45 @@
+/* Задача:
+Напишите функцию, которая подсчитывает, сколько различных способов вы можете внести изменения на сумму денег, учитывая массив номиналов монет. Например, есть 3 способа дать сдачу за 4, если у вас есть монеты достоинством 1 и 2:
+
+1 + 1 + 1 + 1, 1 + 1 + 2, 2 + 2.
+
+Порядок монет не имеет значения:
+1 + 1 + 2 == 2 + 1 + 1
+
+Также предположим, что у вас бесконечное количество монет.
+
+Ваша функция должна взять сумму для изменения и массив уникальных номиналов для монет:
+
+countChange(4, [1,2]) // => 3
+countChange(10, [5,2,3]) // => 4
+countChange(11, [5,7]) // => 0
+*/
+
+// 1й способ:
+// let countChange = function (money, coins) {
+//   let arr = new Array(money + 1).fill(0);
+//   arr[0] = 1;
+
+//   for (let i = 0; i < arr.length; i++) {
+//     for (let j = coins[i]; j <= money; j++) arr[j] += arr[j - coins[i]];
+//   }
+
+//   return arr[money];
+// };
+
+// 2й способ:
+let countChange = function (money, coins) {
+  if (money < 0 || coins.length === 0) return 0;
+  else if (money === 0) return 1;
+  else return countChange(money - coins[0], coins) + countChange(money, coins.slice(1));
+};
+
+console.log(countChange(4, [1, 2])); // expected 3
+console.log(countChange(10, [5, 2, 3])); // expected 4
+console.log(countChange(11, [5, 7])); // expected 0
+console.log(countChange(98, [3, 14, 8])); // expected 19
+console.log(countChange(199, [3, 5, 9, 15])); // expected 760
+console.log(countChange(300, [5, 10, 20, 50, 100, 200, 500])); // expected 1022
+console.log(countChange(300, [500, 5, 50, 100, 20, 200, 10])); // expected 1022
+console.log(countChange(301, [5, 10, 20, 50, 100, 200, 500])); // expected 0
+console.log(countChange(419, [2, 5, 10, 20, 50])); // expected 18515
