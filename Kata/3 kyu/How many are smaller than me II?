@@ -1,0 +1,82 @@
+/* Задача:
+Напишите функцию smaller(arr)
+С учетом массива arr, вы должны вернуть количество чисел, которые меньше, чем arr [i] справа.
+
+Например:
+smaller([5, 4, 3, 2, 1]) === [4, 3, 2, 1, 0]
+smaller(1, 2, 0) === [1, 1, 0]
+*/
+
+// 1й способ:
+// let res = [];
+
+// let Node = function (v, s) {
+//   this.dup = 1;
+//   this.value = v;
+//   this.sum = s;
+//   this.right = null;
+//   this.left = null;
+// };
+
+// function insert(num, node, res, i, preSum) {
+//   if (node === null) {
+//     node = new Node(num, 0);
+//     res[i] = preSum;
+//   } else if (node.value == num) {
+//     node.dup++;
+//     res[i] = preSum + node.sum;
+//   } else if (node.value > num) {
+//     node.sum++;
+//     node.left = insert(num, node.left, res, i, preSum);
+//   } else {
+//     node.right = insert(num, node.right, res, i, preSum + node.dup + node.sum);
+//   }
+
+//   return node;
+// }
+
+// function smaller(arr) {
+//   res = [];
+//   root = null;
+//   for (let i = arr.length - 1; i >= 0; i--) {
+//     root = insert(arr[i], root, res, i, 0);
+//   }
+
+//   return res;
+// }
+
+// 2й способ:
+function smaller(arr) {
+  let n = arr.length;
+  if (n == 0) return [];
+  let sorted = Array.from(new Set(arr)).sort((prev, next) => prev - next);
+  let u = sorted.length;
+  let ords = sorted.reduce((h, x, i) => ((h[x] = i), h), {});
+  let tree = new Uint16Array(u + 1); // Binary Indexed Tree
+  let xs = arr.slice();
+  for (let i = n - 1; i >= 0; i--) {
+    let k = ords[arr[i]];
+    xs[i] = count(tree, k);
+    incr(tree, k + 1, u);
+  }
+  return xs;
+}
+
+function count(tree, index) {
+  let i = index + 1;
+  let sum = 0;
+  while (i > 0) (sum += tree[i]), (i -= i & -i);
+  return sum;
+}
+
+function incr(tree, index, n) {
+  let i = index + 1;
+  while (i <= n) ++tree[i], (i += i & -i);
+}
+
+console.log(smaller([5, 4, 3, 2, 1])); // expected [4, 3, 2, 1, 0]
+console.log(smaller([1, 2, 3])); // expected [0, 0, 0]
+console.log(smaller([1, 2, 0])); // expected [1, 1, 0]
+console.log(smaller([1, 2, 1])); // expected [0, 1, 0]
+console.log(smaller([1, 1, -1, 0, 0])); // expected [3, 3, 0, 0, 0]
+console.log(smaller([5, 4, 7, 9, 2, 4, 4, 5, 6])); // expected [4, 1, 5, 5, 0, 0, 0, 0, 0]
