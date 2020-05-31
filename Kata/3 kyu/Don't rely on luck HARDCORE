@@ -1,0 +1,24 @@
+/* Задача:
+Этот тестовый прибор сравнит ваше предположение со случайным числом, сгенерированным в Javascript / CoffeeScript:
+
+Math.floor(Math.random()) * 100000 + 1) Вы можете пройти только, полагаясь на умение - потому что тесты будут повторяться несколько раз.
+*/
+
+// Math = Object.create(Math, {
+//   random: {
+//     value: (() => {
+//       let rnd = 0;
+//       return () => (rnd = rnd + Number.EPSILON);
+//     })(),
+//   },
+// });
+// Math.random.toString = () => "function random() { [native code] }";
+// Object.freeze(Math);
+
+// let guess = 1;
+
+let rnd = 0.00000001;
+Math = Object.create(Math, { random: { value: () => (rnd += 0.00000001) } });
+Math.random.toString = () => "function random() { [native code] }";
+Object.freeze(Math);
+let guess = 1;
