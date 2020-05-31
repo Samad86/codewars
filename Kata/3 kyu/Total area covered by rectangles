@@ -1,0 +1,148 @@
+/* Задача:
+Ваша задача состоит в том, чтобы написать функцию, которая вычисляет площадь, покрытую объединением прямоугольников.
+Прямоугольники могут иметь непустое пересечение, поэтому простое решение: Sall = S1 + S2 + ... + Sn-1 + Sn (где n - количество прямоугольников) не будет работать.
+
+Каждый прямоугольник представлен как: [x0, y0, x1, y1], где:
+(x0, y0) - координаты нижнего левого угла,
+(x1, y1) - координаты верхнего правого угла.
+xi, yi - натуральные числа или нули (0, 1, 2, 3, 4 ..).
+Стороны прямоугольников параллельны координатным осям.
+Ваши входные данные - массив прямоугольников.
+
+Требования к памяти:
+Количество прямоугольников в одном тесте (не включая простые тесты) варьируется от 3000 до 15000. Существует 10 тестов с таким диапазоном. Итак, ваш алгоритм должен быть оптимальным.
+
+Наример:
+
+Есть три прямоугольника: R1 = [3,3,8,5], R2 = [6,3,8,9], R3 = [11,6,14,12]
+S (R1) = 10, S (R2) = 12, S (R3) = 18
+S (R1 ∩ R2) = 4, S (R1 ∩ R3) = 0, S (R2 ∩ R3) = 0
+S = S (R1) + S (R2) + S (R3) - S (R1∩R2) - S (R1∩R3) - S (R2∩R3) = 36
+
+calculate([[3, 3, 8, 5], [6, 3, 8, 9], [11, 6, 14, 12]]) // возвращает 36
+*/
+
+// 1й способ:
+// const X1 = 0;
+// const Y1 = 1;
+// const X2 = 2;
+// const Y2 = 3;
+
+// let ASC = (d) => (a, b) => a[d] - b[d];
+// let ASCX = (a, b) => a - b;
+
+// let calcVerticalZones = (rectangles) => {
+//   let height = 0;
+
+//   rectangles.sort(ASC(Y1)).reduce((prevY, curr) => {
+//     if (prevY < curr[Y2]) {
+//       height += curr[Y2] - Math.max(curr[Y1], prevY);
+//       return curr[Y2];
+//     }
+//     return prevY;
+//   }, 0);
+
+//   return height;
+// };
+
+// function calculate(recs) {
+//   if (recs.length == 0) return 0;
+
+//   let area = 0;
+//   let positions = new Set();
+//   let startFrom = 0;
+
+//   recs = recs.sort(ASC(X1));
+//   recs.forEach((rectangle) => {
+//     positions.add(rectangle[X1]);
+//     positions.add(rectangle[X2]);
+//   });
+
+//   let rectanglesInProgress = [];
+
+//   [...positions].sort(ASCX).map((position, i, arr) => {
+//     let prevPosition = arr[i - 1] || 0;
+
+//     let width = position - prevPosition;
+//     let height = calcVerticalZones(rectanglesInProgress);
+
+//     area += width * height;
+
+//     rectanglesInProgress = rectanglesInProgress.filter((r) => r[X2] > position);
+
+//     for (
+//       let i = startFrom;
+//       i < recs.length && recs[i][X1] == position;
+//       startFrom = ++i
+//     ) {
+//       rectanglesInProgress.push(recs[i]);
+//     }
+//   });
+
+//   return area;
+// }
+
+// 2й способ:
+function calculate(recs) {
+  if (recs.length == 0) return 0;
+
+  recs.sort((prev, next) => prev[0] - next[0]);
+
+  let arrPointers = [];
+
+  for (let i = 0; i < recs.length; i++) {
+    arrPointers.push(recs[i][1]);
+    arrPointers.push(recs[i][3]);
+  }
+
+  arrPointers = [...new Set(arrPointers)];
+  arrPointers.sort((prev, next) => prev - next);
+
+  let sum = 0;
+  let sumObj = {};
+
+  for (let i = 0; i < arrPointers.length - 1; i++) {
+    sumObj[arrPointers[i]] = {
+      pos: 0,
+      hei: arrPointers[i + 1] - arrPointers[i],
+    };
+  }
+
+  for (let r = 0; r < recs.length; r++) {
+    for (let i = recs[r][1]; i < recs[r][3]; ) {
+      // без шага цикла
+      if (!(sumObj[i]["pos"] > recs[r][2])) {
+        if (sumObj[i]["pos"] > recs[r][0])
+          sum = sum + (recs[r][2] - sumObj[i]["pos"]) * sumObj[i]["hei"];
+        else sum = sum + (recs[r][2] - recs[r][0]) * sumObj[i]["hei"];
+        sumObj[i]["pos"] = recs[r][2];
+      }
+      i += sumObj[i]["hei"];
+    }
+  }
+
+  return sum;
+}
+
+console.log(calculate([])); // expected 0
+console.log(calculate([[0, 0, 1, 1]])); // expected 1
+console.log(calculate([[0, 4, 11, 6]])); // expected 22
+console.log(
+  calculate([
+    [0, 0, 1, 1],
+    [1, 1, 2, 2],
+  ])
+); // expected 2
+console.log(
+  calculate([
+    [0, 0, 1, 1],
+    [0, 0, 2, 2],
+  ])
+); // expected 4
+console.log(
+  calculate([
+    [3, 3, 8, 5],
+    [6, 3, 8, 9],
+    [11, 6, 14, 12],
+  ])
+); // expected 36
