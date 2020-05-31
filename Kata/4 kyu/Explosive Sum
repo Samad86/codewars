@@ -1,0 +1,76 @@
+/* Задача:
+Сколько способов вы можете сделать сумму числа?
+
+В теории чисел и комбинаторике разбиение натурального числа n, также называемое целочисленным, представляет собой способ записи n в виде суммы натуральных чисел. Две суммы, отличающиеся только порядком их слагаемых, считаются одним и тем же разбиением. Если порядок имеет значение, сумма становится композицией.
+
+Например, 4 можно разделить пятью различными способами:
+4
+3 + 1
+2 + 2
+2 + 1 + 1
+1 + 1 + 1 + 1
+
+Примеры:
+sum(1) // 1
+sum(2) // 2  -> 1+1 , 2
+sum(3) // 3 -> 1+1+1, 1+2, 3
+sum(4) // 5 -> 1+1+1+1, 1+1+2, 1+3, 2+2, 4
+sum(5) // 7 -> 1+1+1+1+1, 1+1+1+2, 1+1+3, 1+2+2, 1+4, 5, 2+3
+
+sum(10) // 42
+
+sum(50) // 204226
+sum(80) // 15796476
+sum(100) // 190569292
+*/
+
+// function sum(num) {
+//   let p = new Array();
+//   p[0] = 1;
+//   let j = 0;
+//   let k = 0;
+//   let s = 0;
+
+//   if (num <= 0) return 0;
+
+//   for (var i = 1; i <= num; i++) {
+//     j = 1;
+//     k = 1;
+//     s = 0;
+//     while (j > 0) {
+//       j = i - (3 * k * k + k) / 2;
+//       if (j >= 0) s -= Math.pow(-1, k) * p[j];
+//       j = i - (3 * k * k - k) / 2;
+//       if (j >= 0) s -= Math.pow(-1, k) * p[j];
+//       k++;
+//     }
+//     p[i] = s;
+//   }
+
+//   return p[num];
+// }
+
+// let memo = [];
+
+function sum(num, max = num) {
+  if (num == 0) return 1;
+  if (num < 0 || max == 0) return 0;
+  if (max > num) max = num;
+  if (memo[num] && memo[num][max]) return memo[num][max];
+  let total = sum(num, max - 1) + sum(num - max, max);
+  if (!memo[num]) {
+    memo[num] = [];
+  }
+  memo[num][max] = total;
+  return total;
+}
+
+console.log(sum(1)); // expected 1
+console.log(sum(2)); // expected 2
+console.log(sum(3)); // expected 3
+console.log(sum(4)); // expected 5
+console.log(sum(5)); // expected 7
+console.log(sum(10)); // expected 42
+console.log(sum(50)); // expected 204226
+console.log(sum(80)); // expected 15796476
+console.log(sum(100)); // expected 190569292
