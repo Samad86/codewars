@@ -1,0 +1,98 @@
+/* Задача:
+Учитывая две строки s1 и s2, мы хотим визуализировать, насколько разные две строки. Мы будем учитывать только строчные буквы (от a до z). Сначала посчитаем частоту каждой строчной буквы в s1 и s2.
+
+s1 = "A aaaa bb c"
+s2 = "& aaa bbb c d"
+
+s1 имеет 4 'a', 2 'b', 1 'c'
+s2 имеет 3 'a', 3 'b', 1 'c', 1 'd'
+
+Таким образом, максимум для 'a' в s1 и s2 равен 4 от s1; максимум для 'b' равен 3 из s2. В дальнейшем мы не будем рассматривать буквы, когда максимум их вхождений <= 1.
+
+Мы можем возобновить различия между s1 и s2 в следующей строке:
+«1: aaaa / 2: bbb»,
+где 1 в "1: aaaa" обозначает строку s1 и "aaaa", потому что максимум для "a" равен 4. Таким же образом "2: bbb" обозначает строку s2 и "bbb", потому что максимум для "b" равен 3.
+
+Задача состоит в том, чтобы создать строку, в которой каждая строчная буква из s1 или s2 появляется столько раз, сколько ее максимум, если этот максимум строго > 1; этим буквам будет предшествовать номер строки, в которой они появляются, с их максимальным значением и :. Если максимум в s1 такой же, что в s2 - префикс =:.
+
+В результате подстроки (например, подстрока "2:nnnnn" или "1:hhh"; она содержит префикс) будут в порядке убывания их длины, и когда они будут иметь одинаковую длину, отсортированную в возрастающем лексикографическом порядке (буквы и цифры - больше точно отсортировано по коду); различные группы будут разделены символом «/». Смотрите примеры и «Примеры тестов».
+
+Надеюсь, другие примеры могут сделать это более понятным.
+
+s1 = "my&friend&Paul has heavy hats! &"
+s2 = "my friend John has many many friends &"
+mix(s1, s2) --> "2:nnnnn/1:aaaa/1:hhh/2:mmm/2:yyy/2:dd/2:ff/2:ii/2:rr/=:ee/=:ss"
+
+s1 = "mmmmm m nnnnn y&friend&Paul has heavy hats! &"
+s2 = "my frie n d Joh n has ma n y ma n y frie n ds n&"
+mix(s1, s2) --> "1:mmmmmm/=:nnnnnn/1:aaaa/1:hhh/2:yyy/2:dd/2:ff/2:ii/2:rr/=:ee/=:ss"
+
+s1="Are the kids at home? aaaaa fffff"
+s2="Yes they are here! aaaaa fffff"
+mix(s1, s2) --> "=:aaaaaa/2:eeeee/=:fffff/1:tt/2:rr/=:hh"
+
+s1 = "mmmmm m nnnnn y&friend&Paul has heavy hats! &"
+s2 = "my frie n d Joh n has ma n y ma n y frie n ds n&"
+mix(s1, s2) --> "1:mmmmmm/E:nnnnnn/1:aaaa/1:hhh/2:yyy/2:dd/2:ff/2:ii/2:rr/=:ee/=:ss"
+*/
+
+// function mix(s1, s2) {
+//   let alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
+//   let s1Count = 0;
+//   let s2Count = 0;
+//   let maxCount = 0;
+
+//   return alphabet
+//     .map((char) => {
+//       s1Count = s1.split("").filter((x) => x === char).length;
+//       s2Count = s2.split("").filter((x) => x === char).length;
+//       maxCount = Math.max(s1Count, s2Count);
+
+//       return {
+//         char: char,
+//         count: maxCount,
+//         src: maxCount > s1Count ? "2" : maxCount > s2Count ? "1" : "=",
+//       };
+//     })
+//     .filter((c) => c.count > 1)
+//     .sort(
+//       (objA, objB) =>
+//         objB.count - objA.count ||
+//         (objA.src + objA.char > objB.src + objB.char ? 1 : -1)
+//     )
+//     .map((c) => `${c.src}:${c.char.repeat(c.count)}`)
+//     .join("/");
+// }
+
+function mix(s1, s2) {
+  let counter = (s) =>
+    s
+      .replace(/[^a-z]/g, "")
+      .split("")
+      .sort()
+      .reduce((x, y) => ((x[y] = 1 + (x[y] || 0)), x), {});
+  s1 = counter(s1);
+  s2 = counter(s2);
+  let res = [];
+  let keys = new Set(Object.keys(s1).concat(Object.keys(s2)));
+
+  keys.forEach((key) => {
+    let c1 = s1[key] || 0;
+    let c2 = s2[key] || 0;
+    let count = Math.max(c1, c2);
+    if (count > 1) {
+      let from = [1, "=", 2][Math.sign(c2 - c1) + 1];
+      let str = [...Array(count)].map((_) => key).join("");
+      res.push(from + ":" + str);
+    }
+  });
+
+  return res.sort((x, y) => y.length - x.length || (x < y ? -1 : 1)).join("/");
+}
+
+console.log(mix("Are they here", "yes, they are here")); // expected "2:eeeee/2:yy/=:hh/=:rr"
+console.log(mix("looping is fun but dangerous", "less dangerous than coding")); // expected "1:ooo/1:uuu/2:sss/=:nnn/1:ii/2:aa/2:dd/2:ee/=:gg"
+console.log(mix(" In many languages", " there's a pair of functions")); // expected "1:aaa/1:nnn/1:gg/2:ee/2:ff/2:ii/2:oo/2:rr/2:ss/2:tt"
+console.log(mix("Lords of the Fallen", "gamekult")); // expected "1:ee/1:ll/1:oo"
+console.log(mix("codewars", "codewars")); // expected ""
+console.log(mix("A generation must confront the looming ", "codewarrs")); // expected "1:nnnnn/1:ooooo/1:tttt/1:eee/1:gg/1:ii/1:mm/=:rr"
