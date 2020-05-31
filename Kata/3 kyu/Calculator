@@ -7,6 +7,7 @@ Calculator().evaluate("2 / 2 + 3 * 4 - 6") # => 7
 Помните о порядке операций! Умножения и деления имеют более высокий приоритет и должны выполняться слева направо. Сложения и вычитания имеют более низкий приоритет и также должны выполняться слева направо.
 */
 
+// 1й способ:
 // const Calculator = function () {
 //   this.evaluate = (string) => {
 //     let arr = string.split(" ");
@@ -30,6 +31,7 @@ Calculator().evaluate("2 / 2 + 3 * 4 - 6") # => 7
 //   };
 // };
 
+// 2й способ:
 const Calculator = function () {
   this.operation = (a, b, operator) => {
     switch (operator) {
