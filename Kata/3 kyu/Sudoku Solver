@@ -1,0 +1,133 @@
+/* Задача:
+Напишите функцию, которая решит головоломку 9х9 судоку. Функция примет один аргумент, состоящий из двумерного массива головоломки, со значением 0, представляющим неизвестный квадрат.
+
+Судоку, проверенный на соответствие вашей функции, будет «легким» (то есть определяемым; не нужно будет предполагать и тестировать возможности на неизвестных) и может быть решен с помощью метода грубой силы.
+
+Var Puzzle = [
+             [5,3,0,0,7,0,0,0,0],
+             [6,0,0,1,9,5,0,0,0],
+             [0,9,8,0,0,0,0,6,0],
+             [8,0,0,0,6,0,0,0,3],
+             [4,0,0,8,0,3,0,0,1],
+             [7,0,0,0,2,0,0,0,6],
+             [0,6,0,0,0,0,2,8,0],
+             [0,0,0,4,1,9,0,0,5],
+             [0,0,0,0,8,0,0,7,9]];
+
+sudoku(puzzle);
+Должен вернуться:
+[[5,3,4,6,7,8,9,1,2],
+[6,7,2,1,9,5,3,4,8],
+[1,9,8,3,4,2,5,6,7],
+[8,5,9,7,6,1,4,2,3],
+[4,2,6,8,5,3,7,9,1],
+[7,1,3,9,2,4,8,5,6],
+[9,6,1,5,3,7,2,8,4],
+[2,8,7,4,1,9,6,3,5],
+[3,4,5,2,8,6,1,7,9]]
+*/
+
+// 1й способ:
+// function legal(solution, i, j, val) {
+//   for (let col = 0; col < 9; col++) {
+//     if (solution[i][col] == val) return false;
+//   }
+
+//   for (let row = 0; row < 9; row++) {
+//     if (solution[row][j] == val) return false;
+//   }
+
+//   let row = Math.floor(i / 3) * 3;
+//   let col = Math.floor(j / 3) * 3;
+//   // sub 3 x 3 contains 1 - 9
+//   for (let k = row; k < row + 3; k++) {
+//     for (let l = col; l < col + 3; l++) {
+//       if (val == solution[k][l]) return false;
+//     }
+//   }
+//   return true;
+// }
+
+// function sudokuSolver(solution, i, j) {
+//   if (i == 9) {
+//     i = 0;
+//     j = j + 1;
+//     if (j == 9) return true; // we are done
+//   }
+
+//   if (solution[i][j] > 0) return sudokuSolver(solution, i + 1, j); // fill the value down the row
+
+//   // sudoku value
+//   for (let val = 1; val <= 9; val++) {
+//     // guess non-filled value
+//     if (legal(solution, i, j, val)) {
+//       solution[i][j] = val;
+//       if (sudokuSolver(solution, i + 1, j)) return true;
+//     }
+//   }
+//   // no valid value
+//   solution[i][j] = 0;
+//   return false;
+// }
+
+// function sudoku(puzzle) {
+//   //return the solved puzzle as a 2d array of 9 x 9
+//   let solution = JSON.parse(JSON.stringify(puzzle));
+//   if (sudokuSolver(solution, 0, 0)) return solution;
+//   return null;
+// }
+
+// 2й способ:
+function sudoku(puzzle) {
+  let valid = (x, y) => {
+    let v = [];
+
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        v.push(puzzle[x][i * 3 + j]);
+        v.push(puzzle[i * 3 + j][y]);
+        v.push(puzzle[3 * Math.floor(x / 3) + i][3 * Math.floor(y / 3) + j]);
+      }
+    }
+
+    return [1, 2, 3, 4, 5, 6, 7, 8, 9].filter((e) => v.indexOf(e) == -1);
+  };
+
+  let rec = (x, y) => {
+    if (y == 9) {
+      return puzzle;
+    } else if (!puzzle[x][y]) {
+      let correct = valid(x, y).some((i) => {
+        puzzle[x][y] = i;
+        return rec((x + 1) % 9, y + (x == 9 ? 1 : 0));
+      });
+      if (correct) return puzzle;
+      puzzle[x][y] = 0;
+    } else return rec((x + 1) % 9, y + (x == 8 ? 1 : 0));
+  };
+
+  return rec(0, 0);
+}
+
+console.log(
+  sudoku([
+    [5, 3, 0, 0, 7, 0, 0, 0, 0],
+    [6, 0, 0, 1, 9, 5, 0, 0, 0],
+    [0, 9, 8, 0, 0, 0, 0, 6, 0],
+    [8, 0, 0, 0, 6, 0, 0, 0, 3],
+    [4, 0, 0, 8, 0, 3, 0, 0, 1],
+    [7, 0, 0, 0, 2, 0, 0, 0, 6],
+    [0, 6, 0, 0, 0, 0, 2, 8, 0],
+    [0, 0, 0, 4, 1, 9, 0, 0, 5],
+    [0, 0, 0, 0, 8, 0, 0, 7, 9],
+  ])
+); // expected
+// [[5, 3, 4, 6, 7, 8, 9, 1, 2],
+//  [6, 7, 2, 1, 9, 5, 3, 4, 8],
+//  [1, 9, 8, 3, 4, 2, 5, 6, 7],
+//  [8, 5, 9, 7, 6, 1, 4, 2, 3],
+//  [4, 2, 6, 8, 5, 3, 7, 9, 1],
+//  [7, 1, 3, 9, 2, 4, 8, 5, 6],
+//  [9, 6, 1, 5, 3, 7, 2, 8, 4],
+//  [2, 8, 7, 4, 1, 9, 6, 3, 5],
+//  [3, 4, 5, 2, 8, 6, 1, 7, 9]]
