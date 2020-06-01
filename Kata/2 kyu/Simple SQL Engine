@@ -1,0 +1,398 @@
+/* Задача:
+В этой ката вы создадите объект, который может выполнить запрос, написанный в упрощенной форме языка структурированных запросов (SQL) для простой базы данных.
+
+Упрощенный SQL
+Мы будем использовать значительно упрощенную версию SQL. Механизм запросов должен будет обрабатывать запросы SQL, содержащие только следующее:
+
+Предложение SELECT с любым количеством столбцов,
+Предложение FROM, которое идентифицирует первичную таблицу для выбора записей,
+Любое количество необязательных предложений JOIN, которые присоединяют другую таблицу к таблице, определенной предложением FROM, и все они будут обрабатываться как INNER JOIN.
+Необязательное предложение WHERE только с одним условием.
+Для ясности, вот некоторые общие функции SQL, которые вам НЕ нужно поддерживать
+
+Псевдонимы (AS или [заключенные в скобки имена]),
+CASTing,
+ORDER BY, GROUP BY, COUNT, or EXISTS,
+IN или LIKE, или любой другой оператор, кроме простого равенства, неравенства и больше чем / меньше чем,
+AND or OR; допускается только одно условие WHERE
+Все имена таблиц и столбцов будут простыми строками без пробелов. Константные строки будут записаны в обычном формате SQL с одинарными кавычками и экранированием внутренних одинарных кавычек путем их удвоения (например, "строка", содержащая кавычки ').
+
+Вот EBNF грамматика для SQL-запросов, которые вы должны будете уметь обрабатывать:
+query         =  select, ws, from, [ ws, join ], [ ws, where ] ;
+select        =  "SELECT ", column-id, [ { ", ", column-id } ] ;
+from          =  "FROM ", table-name, [ { ws, join } ] ;
+join          =  "JOIN ", table-name, " on ", value-test ;
+where         =  "WHERE ", value-test ;
+value-test    =  value, comparison, value;
+column-id     =  table-name, ".", column-name ;
+table-name    = ? a valid SQL table name ? ;
+column-name   = ? a valid SQL column name ? ;
+value         =  column-id | const
+comparison    =  " = " | " > " | " < " | " <= " | " >= " | " <> " ;
+const         =  ? a number ? | ? a SQL single-quoted string ? ;
+ws            = " " | "\n" | ws, ws ;
+
+Обратите внимание, что SQL не чувствителен к регистру; SELECT и select эквивалентны.
+
+Для этой ката «действительная таблица SQL / имя столбца» - это имя, содержащее только буквы, цифры и символ "_" без пробелов (представлено в JS RegExp как /[a-zA-Z0-9_]+/).
+
+База данных
+База данных будет простым объектом, передаваемым конструктору вашего механизма SQL. Каждая таблица будет свойством объекта с именем таблицы в качестве ключа свойства. Таблицы будут массивами объектов; каждый объект является строкой, а каждое свойство объекта является столбцом в этой строке. (Это не самая эффективная возможная структура, но с ней легко работать.) Пример базы данных поставляется с контрольными примерами.
+
+Результаты
+Ваш метод execute должен возвращать массив объектов. У каждого объекта должно быть свойство для каждого идентификатора столбца в предложении SELECT запроса, для которого установлено выбранное значение для этого столбца.
+
+Помощники по тестированию
+Поскольку мы не реализуем ORDER BY, а встроенный Test.assertS Similar не работает правильно с массивами объектов, когда объекты расположены в разных порядках, я предоставил метод assertSimilRows, который выполняет ту же функцию, что и Test.assertSimil, но работает с объектами ваш метод execute вернется.
+
+SELECT
+Предложение SELECT указывает, какие столбцы из каких таблиц должна содержать каждая строка. Например, предложение SELECT movies.title, directors.name дает каждой строке два столбца: movies.title будет принимать значение заголовка из таблицы фильмов movies, а directors.name будет принимать значение имени из таблицы directors. Только таблицы, включенные в запрос с использованием предложений FROM и JOIN, могут быть выбраны. (Примечание: SELECT * не будет использоваться в этой ката).
+
+FROM
+Предложение FROM определяет первичную таблицу, с которой нужно начинать. Например, предложение FROM movies будет включать в запрос таблицу фильмов movies. Это позволяет читать таблицу фильмов movies с помощью предложения SELECT.
+
+JOIN
+Любое количество предложений JOIN (включая 0; предложения JOIN не требуются для действительного запроса) может определять другие связанные таблицы, которые должны быть включены, вместе с условным оператором (см. ниже), определяющим, как таблицы связаны друг с другом. Например, JOIN directors ON directors.ID = movies.directorID будет связывать таблицу directors с таблицей movies, присоединяя каждую строку, в которой значения directors.ID и movies.directorID совпадают.
+
+Можно использовать несколько предложений JOIN, например:
+JOIN actors_in_movies ON actors_in_movies.movieID = movies.ID
+JOIN actors ON actors.ID = actors_in_movies.actorID
+
+Это позволит считывать совпадающие значения из таблиц actors_in_movies и актеров в предложении SELECT.
+
+Если какая-либо строка в любой таблице может совпадать несколько раз, в результаты следует включить несколько строк. Для этой каты, если строка не имеет соответствующей строки в связанной таблице, эта строка должна быть полностью исключена из результатов. Это известно в других языках SQL как INNER JOIN.
+
+WHERE
+Необязательное предложение WHERE может описывать условный оператор (см. ниже), который указывает, какие строки будут возвращены. Если условный оператор истинен для определенной строки, он будет возвращен. Если это не так, строка будет исключена из результатов.
+
+Условные операторы
+Условные операторы имеют два значения и оператор сравнения. Например, [value1] >= [value2] будет истинным, если value1 больше или равно value2, и ложным, если нет. Эти значения могут быть одной из двух вещей:
+- Значение столбца, ссылающееся на таблицу, используемую запросом. Например, movies.ID = actors_in_movies.movieID будет сравнивать значение идентификатора ID строки фильмов movies со значением идентификатора movieID строки актеров actors_in_movies.
+- Константное значение, либо число, либо строка для этой ката. Число будет просто серией цифр, возможно, десятичным. Например, 101 и 1.01 оба являются числовыми константами. Строка будет количеством символов, заключенных в одинарные кавычки. Для представления буквенных одинарных кавычек в строке будут использоваться две одинарные кавычки. Например, 'строка' и 'строка с "одинарными кавычками" являются' строковыми константами.
+Обычно одна или другая сторона будут значением столбца, а другая - значением столбца или константой. Оператор сравнения будет одним из следующих: = (равно), < (меньше) <= (меньше или равно), > (больше), >= (больше), <> (не равно).
+
+Вот пример псевдокода:
+
+database = {
+    movies: [
+        { id: 1, title: "The Matrix", cert: 15 },
+        { id: 2, title: "Titanic", cert: 12 },
+        { id: 3, title: "Alien", cert: 18 }
+    ]
+    actors_in_movies: [
+        { actorID: 1, movieID: 1 },
+        { actorID: 2, movieID: 1 },
+        { actorID: 3, movieID: 2 },
+        { actorID: 4, movieID: 3 }
+    ],
+    actors: [
+        { id: 1, name: "Keanu Reeves" },
+        { id: 2, name: "Carrie-Anne Moss" },
+        { id: 4, name: "Sigourney Weaver" }
+    ]
+};
+
+SELECT movies.title, actors.name
+FROM movies
+JOIN actors_in_movies ON actors_in_movies.movieID = movies.ID
+JOIN actors ON actors_in_movies.actorID = actors.ID
+WHERE movies.cert <= 15
+
+* FROM *                                         * First JOIN *                 * Second JOIN *                              * WHERE *
+[ movies ]                                      [ actors_in_movies ]            [ actors ]                                  
+ { id: 1, title: "The Matrix", cert: 15 }        { actorID: 1, movieID: 1 }      { id: 1, name: "Keanu Reeves" }             true
+ \* mutiple matching rows in actors_in_movies;   { actorID: 2, movieID: 1 }      { id: 2, name: "Carrie-Anne Moss" }         true
+   row duplicated \*
+ { id: 2, title: "Titanic", cert: 12 }           { actorID: 3, movieID: 2 }      \* no matching row found; entire row
+                                                                                   (including movies and actors_in_movies)
+                                                                                   is omitted
+ { id: 3, title: "Alien", cert: 18 }             { actorID: 4, movieID: 3 }      { id: 4, name: "Sigourney Weaver" }         false
+
+* SELECT *
+ { movies.title: "The Matrix", actors.name: "Keanu Reeves" }
+ { movies.title: "The Matrix", actors.name: "Carrie-Anne Moss" }
+*/
+
+function SQLEngine(database) {
+  // лексический анализ. Распознавание операторов сравнения, ключевых слов FROM, JOIN, WHERE, ON
+
+  const OPERATORS = ["<=", ">=", "<>", "=", "<", ">"]; // операторы сравнения
+  const reFrom = /FROM/i;
+  const reJoin = /JOIN/i;
+  const reWhere = /WHERE/i;
+  const reON = /ON/i;
+
+  this.database = database;
+
+  this.getTableData = (tableName) => {
+    let table = this.database[tableName];
+
+    return table.map((rowObj) => {
+      let mapData = Object.keys(rowObj).reduce((rowMap, k) => {
+        rowMap[tableName + "." + k] = rowObj[k];
+        return rowMap;
+      }, {});
+      return mapData;
+    });
+  };
+
+  // Условия парсинга
+  this.parseCondition = (condition) => {
+    let op = OPERATORS.find((op) => condition.indexOf(op) >= 0); // операторы сравнения
+    let idxOp = condition.indexOf(op);
+
+    let leftCondField = condition.substring(0, idxOp).trim();
+    let rightCondField = condition.substring(idxOp + op.length).trim();
+    let isLeftFieldColumn = leftCondField.indexOf(".") >= 0;
+
+    let [condColumn, condField] = isLeftFieldColumn
+      ? [leftCondField, rightCondField]
+      : [rightCondField, leftCondField];
+
+    let constValue = condField;
+    // строка с одинарными кавычками ''
+    if (condField.indexOf("'") >= 0) {
+      constValue = condField.substring(1, condField.length - 1);
+      if (constValue.indexOf("''") >= 0)
+        constValue = constValue.replace("''", "'"); // обрезаются кавычки у строки и если есть пустые строки (в ''), заменяется на '
+    } else if (!isNaN(condField)) constValue = Number(condField);
+
+    // При парсинге определяются строковые значения для операторов сравнения. Определяются функции f, выполняющие реальные сравнения для них
+    let f = null;
+    if (op == "=") f = (x, y) => x == y;
+    else if (op == "<=") f = (x, y) => x <= y;
+    else if (op == ">=") f = (x, y) => x >= y;
+    else if (op == "<") f = (x, y) => x < y;
+    else if (op == ">") f = (x, y) => x > y;
+    else if (op == "<>") f = (x, y) => x != y;
+
+    return {
+      condColumn: condColumn,
+      constValue: constValue,
+      func: f,
+    };
+  };
+
+  this.filterResult = (results, strQuery, idxWhere) => {
+    if (idxWhere >= 0) {
+      let condition = strQuery.substring(idxWhere + 5).trim();
+      let { condColumn, constValue, func } = this.parseCondition(condition);
+
+      return results.reduce((acc, record) => {
+        if (func(record[condColumn], constValue)) {
+          acc.push(record);
+        }
+        return acc;
+      }, []);
+    }
+
+    return results;
+  };
+
+  this.projection = (results, strQuery, idxFrom) => {
+    let projectedFields = strQuery
+      .substring(6, idxFrom)
+      .trim()
+      .replace(/\s/g, "")
+      .split(","); // убираем пробелы и разбиваем строку запроса на массив
+
+    return results.map((rowObj) => {
+      return projectedFields.reduce((rowMap, f) => {
+        rowMap[f] = rowObj[f];
+        return rowMap;
+      }, {});
+    });
+  };
+
+  this.joinCondition = (results, joinClause) => {
+    // JOIN <table> ON <value> <operator> <value>
+    let { joinTableName, condColumn, constValue, func } = joinClause;
+    let tableData = this.getTableData(joinTableName);
+
+    let newResults = results.reduce((acc, rowObj) => {
+      acc = tableData.reduce((acc1, rowObj1) => {
+        let leftValue, rightValue;
+        if (rowObj[condColumn]) {
+          leftValue = rowObj[condColumn];
+          rightValue = rowObj1[constValue];
+        } else {
+          leftValue = rowObj[constValue];
+          rightValue = rowObj1[condColumn];
+        }
+
+        let joinRecord = {};
+        Object.keys(rowObj).forEach((k) => {
+          joinRecord[k] = rowObj[k];
+        });
+        Object.keys(rowObj1).forEach((k) => {
+          joinRecord[k] = rowObj1[k];
+        });
+
+        if (func(leftValue, rightValue)) acc1.push(joinRecord);
+
+        return acc1;
+      }, acc);
+      return acc;
+    }, []);
+    return newResults;
+  };
+
+  this.joinConditions = (results, strQuery, idxWhere) => {
+    // парсинг strQuery для извлечения всех предложений JOIN
+    // перебор предложений JOIN, передача промежуточных результатов и JOIN
+    // предложение this.joinCondition для определения нового набора результатов
+
+    let joinClauses = [];
+    let idxJoin = strQuery.search(reJoin);
+    while (idxJoin >= 0) {
+      let idxNextJoin = strQuery.substring(idxJoin + 4).search(reJoin);
+      let joinStmt = "";
+      if (idxNextJoin >= 0) {
+        joinStmt = strQuery
+          .substring(idxJoin + 4, idxNextJoin + idxJoin + 4)
+          .trim();
+        idxJoin = idxNextJoin + idxJoin + 4;
+      } else {
+        if (idxWhere >= 0)
+          joinStmt = strQuery.substring(idxJoin + 4, idxWhere).trim();
+        else joinStmt = strQuery.substring(idxJoin + 4).trim();
+
+        idxJoin = -1;
+      }
+      let idxOn = joinStmt.search(reON);
+      let joinTableName = joinStmt.substring(0, idxOn).trim();
+      let joinCondition = joinStmt.substring(idxOn + 2).replace(/\s/g, "");
+      let joinInfo = this.parseCondition(joinCondition);
+      joinInfo["joinTableName"] = joinTableName;
+      joinClauses.push(joinInfo);
+    }
+
+    joinClauses.forEach((joinClause) => {
+      results = this.joinCondition(results, joinClause);
+    });
+
+    return results;
+  };
+
+  this.execute = (query) => {
+    // 1) Нахождение полей запроса
+    // - поиск SELECT и FROM и нахождение имен полей между ними
+    // - разделение полей запятой
+    // - извлечение имени таблицы и имени столбца для каждого поля, сохранение их
+    // 2) Получение первичной таблицы в предложении FROM
+    // 3) Многократное JOIN
+    // 4) Поиск WHERE и извлечение условия
+    // - определение оператора сравнения =, <, <=,>,> =, <>.
+    // - определить значения условия, столбца или константы:
+    //   если это константа, число или строка в кавычках
+    // 5) Выполнение FROM-JOIN, чтобы сформировать результат выбора
+    // 6) Фильтрация результатов по предложению WHERE
+    // 7) Функция projection()
+
+    let strQuery = query.trim();
+    let idxFrom = strQuery.search(reFrom);
+    let idxJoin = strQuery.search(reJoin);
+    let idxWhere = strQuery.search(reWhere);
+    let idxNextKeyword =
+      idxJoin >= 0 ? idxJoin : idxWhere > 0 ? idxWhere : query.length;
+
+    let primaryTableName = strQuery
+      .substring(idxFrom + 4, idxNextKeyword)
+      .trim();
+
+    let results = this.getTableData(primaryTableName);
+    results = this.joinConditions(results, strQuery, idxWhere);
+    results = this.filterResult(results, strQuery, idxWhere);
+    results = this.projection(results, strQuery, idxFrom);
+
+    return results;
+  };
+}
+
+let movieDatabase = {
+  movie: [
+    { id: 1, name: "Avatar", directorID: 1 },
+    { id: 2, name: "Titanic", directorID: 1 },
+    { id: 3, name: "Infamous", directorID: 2 },
+    { id: 4, name: "Skyfall", directorID: 3 },
+    { id: 5, name: "Aliens", directorID: 1 },
+    {
+      id: 6,
+      name: "Pirates of the Caribbean: Dead Man's Chest",
+      directorID: 9,
+    },
+  ],
+  actor: [
+    { id: 1, name: "Leonardo DiCaprio" },
+    { id: 2, name: "Sigourney Weaver" },
+    { id: 3, name: "Daniel Craig" },
+    { id: 9, name: "Gore Verbinski" },
+  ],
+  director: [
+    { id: 1, name: "James Cameron" },
+    { id: 2, name: "Douglas McGrath" },
+    { id: 3, name: "Sam Mendes" },
+  ],
+  actor_to_movie: [
+    { movieID: 1, actorID: 2 },
+    { movieID: 2, actorID: 1 },
+    { movieID: 3, actorID: 2 },
+    { movieID: 3, actorID: 3 },
+    { movieID: 4, actorID: 3 },
+    { movieID: 5, actorID: 2 },
+  ],
+};
+
+let engine = new SQLEngine(movieDatabase);
+let actual = engine.execute("SELECT movie.name FROM movie");
+console.log(actual);
+
+let actual2 = engine.execute("SELECT movie.name, movie.directorID FROM movie");
+console.log(actual2);
+
+let actual3 = engine.execute(
+  "SELECT movie.name, movie.directorID FROM movie WHERE movie.directorID >= 2"
+);
+console.log(actual3);
+
+let actual3a = engine.execute(
+  "SELECT movie.name, movie.id FROM movie WHERE movie.name = 'Titanic'"
+);
+console.log(actual3a);
+
+let actual4 = engine.execute(
+  "SELECT movie.name, director.name " +
+    "FROM movie " +
+    "JOIN director ON director.id = movie.directorID"
+);
+console.log(actual4);
+
+let actual6 = engine.execute(
+  "SELECT movie.name, director.name " +
+    "FROM director " +
+    "JOIN movie ON director.id = movie.directorID"
+);
+console.log(actual6);
+
+let actual7 = engine.execute(
+  "SELECT movie.name, director.name " +
+    "FROM director " +
+    "JOIN movie ON director.id = movie.directorID " +
+    "WHERE director.name = 'Sam Mendes'"
+);
+console.log(actual7);
+
+let actual5 = engine.execute(
+  "SELECT movie.name, actor.name " +
+    "FROM movie " +
+    "JOIN actor_to_movie ON actor_to_movie.movieID = movie.id " +
+    "JOIN actor ON actor_to_movie.actorID = actor.id " +
+    "WHERE actor.name <> 'Daniel Craig'"
+);
+console.log(actual5);
+
+let actual8 = engine.execute(
+  "SELECT movie.name FROM movie " +
+    "WHERE movie.name = 'Pirates of the Caribbean: Dead Man''s Chest'"
+);
+console.log(actual8);
