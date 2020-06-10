@@ -1,0 +1,41 @@
+/*
+Задача:
+Дано целое число n (3 < n < 109), найти длину наименьшего списка совершенных квадратов, которые складываются в n. Придумайте лучший алгоритм, который вы можете; тебе это понадобится!
+
+Примеры:
+
+sumOfSquares(17) = 2
+17 = 16 + 1 (4 и 1 - идеальные квадраты).
+
+sumOfSquares(15) = 4
+15 = 9 + 4 + 1 + 1. Невозможно представить 15 как сумму трех совершенных квадратов.
+
+sumOfSquares(16) = 1
+16 сама по себе является идеальным квадратом.
+
+Временные ограничения:
+5 простых (выборочных) тестов: n < 20
+5 сложных тестов: 1000 < n < 15000
+5 максимально сложных тестовых случаев: 5 * 1e8 < n < 1e9
+100 случайных максимально сложных тестов: 1e8 < n < 1e9
+*/
+
+function sumOfSquares(n) {
+  let res = Math.floor(Math.sqrt(n));
+  if (res * res == n) return 1;
+
+  for (let i = 1; i <= Math.sqrt(n); i++) {
+    res = Math.floor(Math.sqrt(n - i ** 2));
+    if (res * res == n - i * i) return 2;
+  }
+
+  while (n % 4 == 0) n /= 4;
+
+  return n % 8 == 7 ? 4 : 3;
+}
+
+console.log(sumOfSquares(15)); // expected 4
+console.log(sumOfSquares(16)); // expected 1
+console.log(sumOfSquares(17)); // expected 2
+console.log(sumOfSquares(18)); // expected 2
+console.log(sumOfSquares(19)); // expected 3
