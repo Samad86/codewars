@@ -1,0 +1,66 @@
+/*
+Задача:
+Создайте функцию, принимающую положительное целое число в качестве параметра и возвращающую строку, содержащую римское числовое представление этого целого числа.
+
+Современные римские цифры пишутся, выражая каждую цифру отдельно, начиная с самой левой цифры и пропуская любую цифру со значением ноль. В римских цифрах 1990 отображается: 1000 = M, 900 = CM, 90 = XC; в результате чего MCMXC. 2008 записывается как 2000 = MM, 8 = VIII; или MMVIII. 1666 использует каждый римский символ в порядке убывания: MDCLXVI.
+
+Пример:
+
+solution(1000); // должен вернуть "M"
+
+Символ Значение
+  I       1
+  V       5
+  X       10
+  L       50
+  С       100
+  D       500
+  М       1000
+Помните, что в строке не может быть более 3 одинаковых символов.
+*/
+
+let romans = [
+  [1000, "M"],
+  [900, "CM"],
+  [500, "D"],
+  [400, "CD"],
+  [100, "C"],
+  [90, "XC"],
+  [50, "L"],
+  [40, "XL"],
+  [10, "X"],
+  [9, "IX"],
+  [5, "V"],
+  [4, "IV"],
+  [1, "I"],
+];
+
+function solution(number) {
+  let res = "";
+  let times = 0;
+
+  for (let i in romans) {
+    times = Math.floor(number / romans[i][0]);
+    number = number - times * romans[i][0];
+    res += romans[i][1].repeat(times);
+  }
+
+  return res;
+}
+
+console.log(solution(1)); // expected "I"
+console.log(solution(2)); // expected "II"
+console.log(solution(3)); // expected "III"
+console.log(solution(4)); // expected "IV"
+console.log(solution(5)); // expected "V"
+console.log(solution(9)); // expected "IX"
+console.log(solution(10)); // expected "X"
+console.log(solution(11)); // expected "XI"
+console.log(solution(15)); // expected "XV"
+console.log(solution(19)); // expected "XIX"
+console.log(solution(22)); // expected "XXII"
+console.log(solution(1000)); // expected "M"
+console.log(solution(1001)); // expected "MI"
+console.log(solution(1990)); // expected "MCMXC"
+console.log(solution(2007)); // expected "MMVII"
+console.log(solution(2008)); // expected "MMVIII"
