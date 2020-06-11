@@ -1,0 +1,29 @@
+/*
+Задача:
+В этом ката ваша задача - создать регулярное выражение, способное вычислять двоичные строки (строки только с 1 и 0) и определять, представляет ли данная строка число, кратное 3.
+
+Примите во внимание, что:
+Пустая строка может быть оценена как истина (она не будет проверяться, поэтому вам не нужно беспокоиться об этом - если вы не хотите)
+Ввод должен состоять только из двоичных цифр - без пробелов, других цифр, буквенно-цифровых символов и т. Д.
+Там могут быть ведущие 0.
+
+Примеры:
+multipof3Regex.test("000") должен быть true
+multipleof3Regex.test("001") должен быть false
+multipleof3Regex.test("011") должен быть true
+multipleof3Regex.test("110") должен быть true
+multipleof3Regex.test("abc") должен быть false
+Вы можете проверить больше в примерах тестовых случаев.
+
+Примечание:
+Есть способ разработать автомат (FSM), который оценивает, делаются ли строки, представляющие числа в данной базе, на данное число. Вы можете проверить пример автомата для выполнения этой же конкретной задачи здесь.
+*/
+
+const multipleOf3Regex = /^(0*(1(01*0)*1)*)*$/;
+
+console.log(multipleOf3Regex.test(" 0")); // expected false
+console.log(multipleOf3Regex.test("abc")); // expected false
+console.log(multipleOf3Regex.test("000")); // expected true
+console.log(multipleOf3Regex.test("110")); // expected true
+console.log(multipleOf3Regex.test("111")); // expected false
+console.log(multipleOf3Regex.test((123456789).toString(2))); // expected true
