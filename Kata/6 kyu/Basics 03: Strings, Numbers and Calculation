@@ -1,0 +1,55 @@
+/* Задача:
+Здесь вы должны выполнить некоторые математические операции над «грязной строкой».
+
+Ввод: строка, которая состоит из двух положительных чисел (двойных) и ровно одного оператора, такого как +, -, *, /, всегда между этими числами. Строка грязная, что означает, что внутри тоже есть разные символы, не только цифры и оператор. Вы должны объединить все цифры влево и вправо, возможно, с "." внутри и для вычисления результата, который должен быть округлен до целого числа и преобразован в строку в конце.
+
+Наример:
+
+Input: "gdfgdf234dg54gf*23oP42"
+Output: "54929268" (потому что 23454 * 2342 = 54929268)
+*/
+
+
+// 1й способ:
+// function calculateString(st) {
+//   let res = 0;
+
+//   let reg = /[^0-9^.^[+-/\*]]*/gi;
+//   let arr = st.split(reg);
+//   let expr = arr.join("");
+
+//   if (expr.split("").some((elem) => elem === "+")) {
+//     arr = expr.split("+");
+//     res = +arr[0] + +arr[1];
+//   }
+//   if (expr.split("").some((elem) => elem === "-")) {
+//     arr = expr.split("-");
+//     res = +arr[0] - +arr[1];
+//   }
+//   if (expr.split("").some((elem) => elem === "*")) {
+//     arr = expr.split("*");
+//     res = +arr[0] * +arr[1];
+//   }
+//   if (expr.split("").some((elem) => elem === "/")) {
+//     arr = expr.split("/");
+//     res = +arr[0] / +arr[1];
+//   }
+
+//   return Math.round(res).toString();
+// }
+
+// 2й способ:
+// function calculateString(st) {
+//   return Math.round(eval(st.replace(/[A-Za-z;:$%&§?,]/gi, ""))).toString();
+// }
+
+// 3й способ:
+function calculateString(st) {
+  return eval(st.replace(/[^\d+*/.()-]/g, "")).toFixed();
+}
+
+console.log(calculateString(";$%§fsdfsd235??df/sdfgf5gh.000kk0000")); // expected "47"
+console.log(calculateString("sdfsd23454sdf*2342")); // expected "54929268"
+console.log(calculateString("fsdfsd235???34.4554s4234df-sdfgf2g3h4j442")); // expected "-210908"
+console.log(calculateString("fsdfsd234.4554s4234df+sf234442")); // expected "234676"
+console.log(calculateString("a1a2b3c.c0c/a1a0b.cc00c")); // expected "12"
