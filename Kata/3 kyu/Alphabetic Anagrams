@@ -1,0 +1,59 @@
+/*
+Задача:
+Рассмотрим «слово» как любую последовательность заглавных букв A-Z (не ограничиваясь только «словарными словами»). Для любого слова, содержащего как минимум две разные буквы, существуют другие слова, состоящие из одинаковых букв, но в другом порядке (например, STATIONARILY / ANTIROYALIST, которые оба являются словарными словами; для наших целей "AAIILNORSTTY" также является "словом" и состоит из тех же букв, что и эти два).
+
+Затем мы можем присвоить число каждому слову, основываясь на том, где оно находится в отсортированном по алфавиту списке всех слов, составленных из одной и той же группы букв. Один из способов сделать это - сгенерировать весь список слов и найти нужный, но это будет медленно, если слово длинное.
+
+Если дано слово, верните его номер. Ваша функция должна принимать любое слово длиной не более 25 букв (возможно, с повторением некоторых букв) и запускаться не более 500 миллисекунд. Для сравнения, когда код решения выполняет 27 тестовых случаев в JS, это занимает 101 мс.
+
+Для очень больших слов вы столкнетесь с проблемами точности чисел в JS (если позиция слова больше 2 ^ 53). Для тестов JS с большими позициями есть некоторый запас (.000000001%). Если вы чувствуете, что вы делаете это правильно для меньших рангов, и терпите неудачу, только округляя большее, отправьте еще пару раз и посмотрите, если это потребуется.
+
+Примеры слов с указанием их ранга:
+ABAB = 2
+AAAB = 1
+BAAA = 4
+QUESTION = 24572
+BOOKKEEPER = 10743
+*/
+
+function factorial(num) {
+  let res = 1;
+  for (let i = 2; i <= num; i++) res = res * i;
+  return res;
+}
+
+function repeat_product(s) {
+  let counter = {};
+  for (let i = 0; i < s.length; i++) {
+    if (!(s[i] in counter)) counter[s[i]] = 0;
+    counter[s[i]] += 1;
+  }
+  let res = 1;
+  for (let k in counter) res *= factorial(counter[k]);
+  return res;
+}
+
+function listPosition(word) {
+  //Return the anagram list position of the word
+  let res = 1;
+  let wlist = word.slice().split("").sort();
+  for (let i = 0; i < word.length; i++) {
+    let n = wlist.length;
+    let f = factorial(n) / repeat_product(wlist);
+    let ind = wlist.indexOf(word[i]);
+    if (ind === 0) {
+      wlist = wlist.slice(1, wlist.length);
+      continue;
+    }
+    res += (f * ind) / n;
+    wlist = wlist.slice(0, ind).concat(wlist.slice(ind + 1, wlist.length));
+  }
+  return res;
+}
+
+console.log(listPosition("A")); // expected 1
+console.log(listPosition("ABAB")); // expected 2
+console.log(listPosition("AAAB")); // expected 1
+console.log(listPosition("BAAA")); // expected 4
+console.log(listPosition("QUESTION")); // expected 24572
+console.log(listPosition("BOOKKEEPER")); // expected 10743
