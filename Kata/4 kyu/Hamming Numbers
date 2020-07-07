@@ -1,0 +1,57 @@
+/*
+Задача:
+Число Хэмминга - это положительное целое число вида 2^i * 3^j * 5^k для некоторых неотрицательных целых чисел i, j и k.
+
+Напишите функцию, которая вычисляет n-е наименьшее число Хэмминга.
+
+В частности:
+
+Первое наименьшее число Хэмминга равно 1 = 2^0 * 3^0 * 5^0
+Второе наименьшее число Хэмминга равно 2 = 2^1 * 3^0 * 5^0
+Третье наименьшее число Хэмминга - 3 = 2^0 * 3^1 * 5^0
+Четвертое наименьшее число Хэмминга равно 4 = 2^2 * 3^0 * 5^0
+Пятое наименьшее число Хэмминга равно 5 = 2^0 * 3^0 * 5^1
+20 наименьших чисел Хэмминга приведены в примере тестового прибора.
+
+Ваш код должен быть в состоянии вычислить все самые маленькие 5000 чисел Хэмминга без тайм-аута.
+*/
+
+function hamming(n) {
+  let res = [1];
+  let visited = {};
+  let iRes = 0;
+  let jRes = 0;
+  let kRes = 0;
+
+  for (let i = 1; i < n; i++) {
+    let temp = Math.min(2 * res[iRes], 3 * res[jRes], 5 * res[kRes]);
+    if (temp == 2 * res[iRes]) iRes++;
+    else if (temp == 3 * res[jRes]) jRes++;
+    else kRes++;
+    if (!(temp in visited)) {
+      res.push(temp);
+      visited[temp] = 1;
+    } else i--;
+  }
+  return res[n - 1];
+}
+
+console.log(hamming(1)); // expected 1
+console.log(hamming(2)); // expected 2
+console.log(hamming(3)); // expected 3
+console.log(hamming(4)); // expected 4
+console.log(hamming(5)); // expected 5
+console.log(hamming(6)); // expected 6
+console.log(hamming(7)); // expected 8
+console.log(hamming(8)); // expected 9
+console.log(hamming(9)); // expected 10
+console.log(hamming(10)); // expected 12
+console.log(hamming(11)); // expected 15
+console.log(hamming(12)); // expected 16
+console.log(hamming(13)); // expected 18
+console.log(hamming(14)); // expected 20
+console.log(hamming(15)); // expected 24
+console.log(hamming(16)); // expected 25
+console.log(hamming(17)); // expected 27
+console.log(hamming(18)); // expected 30
+console.log(hamming(19)); // expected 32
