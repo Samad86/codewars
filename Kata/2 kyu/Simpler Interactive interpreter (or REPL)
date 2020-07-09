@@ -1,0 +1,170 @@
+/*
+Задача:
+Вы создадите интерпретатор, который принимает входные данные, описанные ниже, и производит выходные данные, сохраняя состояние между каждым входным сигналом.
+
+Обратите внимание, что команда eval была отключена.
+
+Концепции:
+Переводчик примет входные данные на языке, описанном под заголовком языка ниже. В этом разделе дается обзор языковых конструкций.
+
+Переменные:
+Любой идентификатор, который не является ключевым словом, будет рассматриваться как переменная. Если идентификатор находится слева от оператора присваивания, результат правой части будет сохранен в переменной. Если переменная встречается как часть выражения, значение, содержащееся в переменной, будет подставлено при оценке выражения.
+
+Переменные неявно объявляются при первом назначении.
+
+Пример: Инициализация переменной в постоянное значение и использование переменной в другом выражении (каждая строка, начинающаяся с '>', указывает на отдельный вызов метода ввода интерпретатора, другие строки представляют вывод)
+
+>х = 7
+    7
+>х + 6
+    13
+Ссылка на несуществующую переменную заставит интерпретатор выдать ошибку. Переводчик должен продолжать принимать вводные данные даже после броска.
+
+Пример: ссылка на несуществующую переменную
+
+>у + 7
+    ERROR: Неверный идентификатор. Переменная с именем "y" не найдена.
+
+Назначения:
+Присвоение - это выражение с идентификатором слева от оператора = и любым выражением справа. Такие выражения должны хранить значение правой части в указанной переменной и возвращать результат.
+
+Пример: присвоение константы переменной
+
+х = 7
+    7
+В этом ката все тесты будут содержать только одно задание. Вам не нужно рассматривать цепочечные или вложенные назначения.
+
+Приоритет оператора:
+Приоритет оператора будет следовать общему порядку. В разделе «Язык» ниже приведена таблица, в которой явно указаны операторы и их относительный приоритет.
+
+Конфликты имен:
+Поскольку переменные объявляются неявно, никакие конфликты имен невозможны. присваивание переменной всегда перезапишет любое существующее значение.
+
+Ввод:
+Ввод будет соответствовать произведению выражения в грамматике ниже.
+
+Вывод:
+Выход для действительного выражения будет результатом выражения.
+
+Вывод для ввода, состоящего полностью из пробелов, будет пустой строкой (ноль в случае Java).
+
+Все остальные случаи приведут к ошибке.
+
+язык
+Грамматика
+В этом разделе указывается грамматика для языка переводчика в синтаксисе EBNF.
+
+выражение :: = фактор | выражение оператор выражение
+фактор :: = число | идентификатор | назначение | '(' выражение ')'
+присваивание :: = идентификатор '=' выражение
+
+оператор :: = "+" | "-'" | ?*" | "/'' | "%"
+"
+идентификатор :: = буква | '_' {идентификатор-символ}
+identifier-char :: = "_" | письмо | цифра
+
+число :: = {цифра} ['.' цифра {цифра}]
+
+буква :: = "a" | "b"| ... | "y" | "z" | "A" | "B" | ... | "Y" | "Z"
+цифра :: = :ERROR"0  | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+Приоритет оbfператора
+В следующей таблице перечислены операторы языка, сгруппированные в порядке приоритета. Операторы в каждой группе имеют равный приоритет.
+
+Категория Операторы
+Мультипликативные *, /, %
+Добавка +, -
+Назначение =
+*/
+
+function isNumeric(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+function Interpreter() {
+  this.vars = {};
+  this.functions = {};
+}
+
+Interpreter.prototype.tokenize = function (program) {
+  if (program === "") return [];
+  let regex = /\s*([-+*\/\%=\(\)]|[A-Za-z_][A-Za-z0-9_]*|[0-9]*\.?[0-9]+)\s*/g;
+  return program.split(regex).filter(function (s) {
+    return !s.match(/^\s*$/);
+  });
+};
+
+Interpreter.prototype.input = function (expr) {
+  let tokens = this.tokenize(expr);
+  if (tokens.length == 0) return "";
+  let op = "+";
+  let preops = []; // preops for parentheses
+  let curvar = null;
+  let stack = [];
+  for (let i = 0; i < tokens.length; i++) {
+    if (isNumeric(tokens[i])) {
+      let temp = parseInt(tokens[i]);
+      if (op == "+") stack.push(temp);
+      else if (op == "-") stack.push(-temp);
+      else if (op == "*") {
+        let temp1 = stack.pop();
+        stack.push(temp1 * temp);
+      } else if (op == "/") {
+        let temp1 = stack.pop();
+        stack.push(temp1 / temp);
+      } else if (op == "%") {
+        let temp1 = stack.pop();
+        stack.push(temp1 % temp);
+      }
+    } else if (/^[a-zA-Z]+$/.test(tokens[i])) {
+      if (!(tokens[i] in this.vars)) {
+        if (tokens[i + 1] != "=") throw "Error";
+        this.vars[tokens[i]] = 0;
+        curvar = tokens[i];
+      } else {
+        if (tokens[i + 1] != "=") stack.push(this.vars[tokens[i]]);
+        else curvar = tokens[i];
+      }
+    } else if (tokens[i] == "=") continue;
+    else if (tokens[i] == "(") {
+      preops.push(op);
+      op = "+";
+      stack.push(tokens[i]);
+    } else if (tokens[i] == ")") {
+      let temp = [];
+      while (true) {
+        let t = stack.pop();
+        if (t == "(") break;
+        temp.push(t);
+      }
+      let tempsum = temp.reduce((a, b) => a + b, 0);
+      let preop = "+";
+      if (preops.length > 0) preop = preops.pop();
+      if (preop == "+") stack.push(tempsum);
+      else if (preop == "-") stack.push(-tempsum);
+      else if (preop == "*") {
+        let t1 = stack.pop();
+        stack.push(t1 * tempsum);
+      } else if (preop == "/") {
+        let t1 = stack.pop();
+        stack.push(t1 / tempsum);
+      } else if (preop == "%") {
+        let t1 = stack.pop();
+        stack.push(t1 % tempsum);
+      }
+    } else op = tokens[i];
+  }
+  let res = stack.reduce((a, b) => a + b, 0);
+  if (curvar != null) this.vars[curvar] = res;
+  return res;
+};
+
+let interpreter = new Interpreter();
+console.log(interpreter.input("1 + 1")); // expected 2
+console.log(interpreter.input("2 - 1")); // expected 1
+console.log(interpreter.input("2 * 3")); // expected 6
+console.log(interpreter.input("8 / 4")); // expected 2
+console.log(interpreter.input("7 % 4")); // expected 3
+console.log(interpreter.input("x = 1")); // expected 1
+console.log(interpreter.input("x")); // expected 1
+console.log(interpreter.input("x + 3")); // expected 4
+console.log(interpreter.input("y")); // expected Error
