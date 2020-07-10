@@ -1,0 +1,126 @@
+/*
+Создайте класс RomanNumerals, который может преобразовывать римские цифры в целочисленные значения. Он должен следовать API, продемонстрированному в примерах ниже. Несколько значений римских цифр будут проверены для каждого вспомогательного метода.
+
+Современные римские цифры пишутся, выражая каждую цифру отдельно, начиная с самой левой цифры и пропуская любую цифру со значением ноль.
+В римских цифрах 1990 отображается: 1000 = M, 900 = CM, 90 = XC; в результате чего MCMXC.
+2008 записывается как 2000 = MM, 8 = VIII; или MMVIII.
+1666 использует каждый римский символ в порядке убывания: MDCLXVI.
+
+Примеры:
+RomanNumerals.toRoman(1000); // должен вернуть "M"
+RomanNumerals.fromRoman("М"); // должен вернуть 1000
+
+Помощь:
+| Символ | Значение | | ---------------- | | Я | 1 | | V | 5 | | X | 10 | | L | 50 | | C | 100 | | D | 500 | | М | 1000 |
+*/
+
+// function Roman() {}
+
+// 1й способ:
+// let RomanNumerals = new Roman();
+
+// Roman.prototype.fromRoman = function (roman) {
+//   let convert = { I: 1, V: 5, X: 10, L: 50, C: 100, D: 500, M: 1000 };
+//   let res = convert[roman[0]];
+//   for (let i = 1; i < roman.length; i++) {
+//     if (convert[roman[i]] <= convert[roman[i - 1]]) res += convert[roman[i]];
+//     else res += convert[roman[i]] - 2 * convert[roman[i - 1]];
+//   }
+//   return res;
+// };
+
+// Roman.prototype.toRoman = function (num) {
+//   if (!+num) return false;
+//   let digits = String(+num).split(""),
+//     key = [
+//       "",
+//       "C",
+//       "CC",
+//       "CCC",
+//       "CD",
+//       "D",
+//       "DC",
+//       "DCC",
+//       "DCCC",
+//       "CM",
+//       "",
+//       "X",
+//       "XX",
+//       "XXX",
+//       "XL",
+//       "L",
+//       "LX",
+//       "LXX",
+//       "LXXX",
+//       "XC",
+//       "",
+//       "I",
+//       "II",
+//       "III",
+//       "IV",
+//       "V",
+//       "VI",
+//       "VII",
+//       "VIII",
+//       "IX",
+//     ],
+//     roman = "",
+//     i = 3;
+//   while (i--) roman = (key[+digits.pop() + i * 10] || "") + roman;
+//   return Array(+digits.join("") + 1).join("M") + roman;
+// };
+
+// 2й способ:
+let digits = [
+  ["M", 1000],
+  ["CM", 900],
+  ["D", 500],
+  ["CD", 400],
+  ["C", 100],
+  ["XC", 90],
+  ["L", 50],
+  ["XL", 40],
+  ["X", 10],
+  ["IX", 9],
+  ["V", 5],
+  ["IV", 4],
+  ["I", 1],
+];
+
+RomanNumerals = {
+  toRoman: function (v) {
+    let s = "";
+    digits.forEach(function (n) {
+      while (v >= n[1]) {
+        s += n[0];
+        v -= n[1];
+      }
+    });
+    return s;
+  },
+  fromRoman: function (s) {
+    let v = 0;
+    digits.forEach(function (n) {
+      while (s.substr(0, n[0].length) == n[0]) {
+        s = s.substr(n[0].length);
+        v += n[1];
+      }
+    });
+    return v;
+  },
+};
+
+console.log(RomanNumerals.toRoman(1000)); // expected "M"
+console.log(RomanNumerals.toRoman(999)); // expected "CMXCIX"
+console.log(RomanNumerals.toRoman(4)); // expected "IV"
+console.log(RomanNumerals.toRoman(1)); // expected "I"
+console.log(RomanNumerals.toRoman(1991)); // expected "MCMXCI"
+console.log(RomanNumerals.toRoman(2006)); // expected "MMVI"
+console.log(RomanNumerals.toRoman(2020)); // expected "MMXX"
+
+console.log(RomanNumerals.fromRoman("XXI")); // expected 21
+console.log(RomanNumerals.fromRoman("I")); // expected 1
+console.log(RomanNumerals.fromRoman("III")); // expected 3
+console.log(RomanNumerals.fromRoman("IV")); // expected 4
+console.log(RomanNumerals.fromRoman("MMVII")); // expected 2007
+console.log(RomanNumerals.fromRoman("MDCLXIX")); // expected 1669
