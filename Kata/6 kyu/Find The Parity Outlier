@@ -1,0 +1,48 @@
+/*
+Вам дан массив (который будет иметь длину не менее 3, но может быть очень большим), содержащий целые числа. Массив либо целиком состоит из нечетных целых чисел, либо целиком состоит из четных целых чисел, за исключением одного целого числа N. Напишите метод, который принимает массив в качестве аргумента и возвращает этот «выброс» N.
+
+Примеры:
+[2, 4, 0, 100, 4, 11, 2602, 36]
+Должен вернуть: 11 (единственное нечетное число)
+
+[160, 3, 1719, 19, 11, 13, -21]
+Должен вернуться: 160 (единственное четное число)
+*/
+
+// 1й способ:
+// function findOutlier(integers) {
+//   if (
+//     (!(integers[0] % 2) && !(integers[1] % 2)) ||
+//     (!(integers[0] % 2) && integers[1] % 2 != 0 && !(integers[2] % 2)) ||
+//     (integers[0] % 2 != 0 && !(integers[1] % 2) && !(integers[2] % 2))
+//   ) {
+//     for (let i = 0; i < integers.length; i++) {
+//       if (integers[i] % 2 != 0) return integers[i];
+//     }
+//   }
+
+//   if (
+//     (integers[0] % 2 != 0 && integers[1] % 2 != 0) ||
+//     (!(integers[0] % 2) && integers[1] % 2 != 0 && integers[2] % 2 != 0) ||
+//     (integers[0] && 2 != 0 && !(integers[1] % 2) && integers[2] % 2 != 0)
+//   ) {
+//     for (let i = 0; i < integers.length; i++) {
+//       if (!(integers[i] % 2)) return integers[i];
+//     }
+//   }
+// }
+
+// 2й способ:
+function findOutlier(integers) {
+  let even = integers.filter((num) => num % 2 == 0);
+  let odd = integers.filter((num) => num % 2 !== 0);
+  return even.length == 1 ? even[0] : odd[0];
+}
+
+console.log(findOutlier([0, 1, 2])); // expected 1
+console.log(findOutlier([1, 2, 3])); // expected 2
+console.log(findOutlier([2, 6, 8, 10, 3])); // expected 3
+console.log(findOutlier([0, 0, 3, 0, 0])); // expected 3
+console.log(findOutlier([1, 1, 0, 1, 1])); // expected 0
+console.log(findOutlier([2, 4, 0, 100, 4, 11, 2602, 36])); // expected 11
+console.log(findOutlier([160, 3, 1719, 19, 11, 13, -21])); // expected 160
