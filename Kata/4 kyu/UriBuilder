@@ -1,0 +1,78 @@
+/*
+Задача:
+Создайте базовый объект UriBuilder, который будет использоваться специально для создания параметров запроса на существующем URI. Он должен поддерживать свойство params и метод сборки. Он будет обрабатывать URL с уже существующими параметрами, которыми нужно управлять. URL-адрес должен быть правильно закодирован (то есть «a b» должен быть закодирован как «a%20b»).
+
+Примеры того, как будет использоваться builder:
+
+let builder = new UriBuilder("http://www.codewars.com")
+builder.params.page = 1
+builder.params.language = "javascript"
+
+// новый экземпляр builder для демонстрации уже существующих параметров
+builder = new UriBuilder("http://www.codewars.com?page=1")
+
+builder.params.page = 2
+// должен вернуть "http://www.codewars.com?page=2"
+builder.build()
+
+// если вы удалите параметры, они исчезнут из строки URL
+delete builder.params.page
+
+// должен вернуть "http://www.codewars.com"
+builder.build()
+
+Примечание. Для дополнительных стилевых точек ваше решение может обрабатывать значения массива в качестве параметров запроса, однако нет тестов, которые явно их проверяют.
+*/
+
+let UriBuilder = function (uri) {
+  this.uri = uri;
+  this.params = this.getParamsFromUri();
+};
+
+UriBuilder.prototype.getParamsFromUri = function () {
+  let params = {};
+  let queryIndex = this.uri.indexOf("?");
+  let paramsArray, paramTuple;
+
+  // Добавляем существующие параметры
+  if (queryIndex > -1) {
+    paramsArray = this.uri.slice(queryIndex + 1).split("&");
+    paramsArray.forEach(function (param) {
+      paramTuple = param.split("="); // ex -> ["page", "1"]
+      params[paramTuple[0]] = paramTuple[1];
+    });
+  }
+
+  return params;
+};
+
+UriBuilder.prototype.build = function () {
+  // Удаляем существующий запрос из URI
+  let uri = this.uri.split("?")[0];
+  let params = Object.keys(this.params);
+  let self = this;
+
+  if (params.length > 0) {
+    uri += "?";
+    params.forEach((key, index) => {
+      if (index > 0) uri += "&";
+      uri +=
+        encodeURIComponent(key) + "=" + encodeURIComponent(self.params[key]);
+    });
+  }
+
+  this.uri = uri;
+  return this.uri;
+};
+
+let root = "http://www.codewars.com";
+let builder = new UriBuilder(root + "?a=1");
+console.log(builder.build()); // expected http://www.codewars.com?a=1
+console.log(builder.params); // expected {a: "1"}
+
+builder.params.a = 2;
+console.log(builder.build()); // expected http://www.codewars.com?a=2
+
+builder = new UriBuilder("http://www.codewars.com?page=1&language=js");
+console.log(builder.build()); // expected http://www.codewars.com?page=1&language=js
+console.log(builder.params); // expected {page: "1", language: "js"}
