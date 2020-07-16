@@ -1,0 +1,59 @@
+/*
+Тесты:
+
+//Ookokokk?
+Test.assertSimilar(testit(0), 0, "")
+Test.assertSimilar(testit(1), 1, "")
+
+//return n-1 ?
+Test.assertSimilar(testit(2), 1, "")
+Test.assertSimilar(testit(3), 2, "")
+
+//return Math.round(n/3) ?
+Test.assertSimilar(testit(4), 1, "")
+Test.assertSimilar(testit(5), 2, "")
+Test.assertSimilar(testit(6), 2, "")
+Test.assertSimilar(testit(7), 3, "")
+
+//All of the above answers are wrong 
+Test.assertSimilar(testit(8), 1, "")
+Test.assertSimilar(testit(9), 2, "")
+Test.assertSimilar(testit(10), 2, "")
+Test.assertSimilar(testit(100), 3, "")
+Test.assertSimilar(testit(1000), 6, "")
+Test.assertSimilar(testit(10000), 5, "")
+
+//return what ? thinking and testing...
+*/
+
+// 1й способ:
+// function testit(n) {
+//   return n.toString(2).split("1").length - 1;
+// }
+
+// 2й способ:
+function testit(n) {
+  return (n.toString(2).match(/1/g) || []).length;
+}
+
+console.log(testit(0)); // expected 0
+console.log(testit(1)); // expected 1
+console.log(testit(2)); // expected 1
+console.log(testit(3)); // expected 2
+console.log(testit(4)); // expected 1
+console.log(testit(5)); // expected 2
+console.log(testit(6)); // expected 2
+console.log(testit(7)); // expected 3
+console.log(testit(8)); // expected 1
+console.log(testit(9)); // expected 2
+console.log(testit(10)); // expected 2
+console.log(testit(100)); // expected 3
+console.log(testit(1000)); // expected 6
+console.log(testit(10000)); // expected 5
+console.log(testit(144842)); // expected 9
+console.log(testit(353238)); // expected 11
+console.log(testit(1048836)); // expected 3
+console.log(testit(4005907)); // expected 9
+console.log(testit(4062772)); // expected 15
+console.log(testit(5220468)); // expected 12
+console.log(testit(8941788)); // expected 10
