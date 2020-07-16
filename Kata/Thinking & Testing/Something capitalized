@@ -1,0 +1,41 @@
+/*
+Тесты:
+
+//return s.toUpperCase() ?
+Test.assertSimilar(testit(""), "", "")
+Test.assertSimilar(testit("a"), "A", "")
+Test.assertSimilar(testit("b"), "B", "")
+Test.assertSimilar(testit("a a"), "A A", "")
+Test.assertSimilar(testit("a b"), "A B", "")
+Test.assertSimilar(testit("a b c"), "A B C", "")
+//click "Submit" try more testcase...
+
+*/
+
+// 1й способ:
+// function testit(s) {
+//   return s
+//     .split("")
+//     .map((elem, i, arr) => {
+//       if (arr[i + 1] === " " || i == arr.length - 1)
+//         arr[i] = arr[i].toUpperCase();
+//       return arr[i];
+//     })
+//     .join("");
+// }
+
+// 2й способ:
+function testit(s) {
+  return s.replace(/.\b/g, (c) => c.toUpperCase());
+}
+
+console.log(testit("")); // expected ""
+console.log(testit("a")); // expected "A"
+console.log(testit("b")); // expected "B"
+console.log(testit("a a")); // expected "A A"
+console.log(testit("a b")); // expected "A B"
+console.log(testit("a b c")); // expected "A B C"
+console.log(testit("cqrnj oulbx gj")); // expected "cqrnJ oulbX gJ"
+console.log(testit("cacv eov")); // expected "cacV eoV"
+console.log(testit("uno")); // expected "unO"
+console.log(testit("gksta ltg ahj")); // expected "gkstA ltG ahJ"
