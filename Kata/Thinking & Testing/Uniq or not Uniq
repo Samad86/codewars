@@ -1,0 +1,41 @@
+/*
+Тесты:
+
+//return a.concat(b) ?
+Test.assertSimilar(testit([0],[1]), [0,1], "")
+Test.assertSimilar(testit([1,2],[3,4]), [1,2,3,4], "")
+Test.assertSimilar(testit([1],[2,3,4]), [1,2,3,4], "")
+Test.assertSimilar(testit([1,2,3],[4]), [1,2,3,4], "")
+Test.assertSimilar(testit([1,2],[1,2]), [1,1,2,2], "")
+//click "Submit" try more testcase...
+*/
+
+// 1й способ:
+// function testit(a, b) {
+//   let arrA = [...new Set(a)];
+//   let arrB = [...new Set(b)];
+
+//   return arrA.concat(arrB).sort((prev, next) => prev - next);
+// }
+
+// 2й способ:
+function testit(a, b) {
+  return [...new Set(a), ...new Set(b)].sort((prev, next) => prev - next);
+}
+
+console.log(testit([0], [1])); // expected "[0, 1]
+console.log(testit([1, 2], [3, 4])); // expected [1, 2, 3, 4]
+console.log(testit([1], [2, 3, 4])); // expected [1, 2, 3, 4]
+console.log(testit([1, 2, 3], [4])); // expected [1, 2, 3, 4]
+console.log(testit([1, 2], [1, 2])); // expected [1, 1, 2, 2]
+console.log(testit([1, 1, 1], [2, 2, 2])); // expected [1, 2]
+console.log(testit([1, 2, 1], [2, 1, 2])); // expected [1, 1, 2, 2]
+console.log(testit([2, 3, 8], [5])); // expected [2, 3, 5, 8]
+console.log(testit([1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1, 1])); // expected [1, 1]
+console.log(testit([9, 9], [1, 6, 2, 9, 6])); // expected [1, 2, 6, 9, 9]
+console.log(testit([1, 3, 9, 4, 7, 4], [3, 9, 9, 8, 6, 9, 6, 4])); // expected [1, 3, 3, 4, 4, 6, 7, 8, 9, 9]
+console.log(testit([9, 4, 1, 10, 4], [1, 3, 7, 2])); // expected [1, 1, 2, 3, 4, 7, 9, 10]
+console.log(testit([2, 4, 8, 5, 9, 7, 10, 6, 1, 2], [10, 6, 8, 1, 5, 7, 3, 8])); // expected [1, 1, 2, 3, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 10, 10]
+console.log(
+  testit([4, 1, 8, 10, 1, 1, 5, 3, 2], [9, 9, 3, 6, 9, 7, 10, 10, 6, 8])
+); // expected [1, 2, 3, 3, 4, 5, 6, 7, 8, 8, 9, 10, 10]
