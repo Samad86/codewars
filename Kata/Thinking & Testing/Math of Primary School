@@ -1,0 +1,35 @@
+/*
+Тесты:
+
+//Add? subtract? multiply? divide? Who and who?
+Test.assertSimilar(testit([0,0,0,0]), 0, "")
+Test.assertSimilar(testit([0,0,0,1]), 0, "")
+Test.assertSimilar(testit([0,0,1,1]), 0, "")
+Test.assertSimilar(testit([0,1,0,1]), 0, "")
+Test.assertSimilar(testit([0,1,1,0]), 1, "")
+Test.assertSimilar(testit([1,0,0,1]), 1, "")
+//Click "Submit" try more testcase...
+*/
+
+function testit(arr) {
+  return arr[0] * arr[3] + arr[1] * arr[2];
+}
+
+console.log(testit([0, 0, 0, 0])); // expected 0
+console.log(testit([0, 0, 0, 1])); // expected 0
+console.log(testit([0, 0, 1, 1])); // expected 0
+console.log(testit([0, 1, 0, 1])); // expected 0
+console.log(testit([0, 7, 0, 4])); // expected 0
+console.log(testit([0, 1, 1, 0])); // expected 1
+console.log(testit([1, 0, 0, 1])); // expected 1
+console.log(testit([1, 0, 0, 2])); // expected 2
+console.log(testit([1, 1, 1, 1])); // expected 2
+console.log(testit([1, 1, 1, 2])); // expected 3
+console.log(testit([2, 2, 2, 2])); // expected 8
+console.log(testit([1, 2, 3, 4])); // expected 10
+console.log(testit([4, 2, 0, 3])); // expected 12
+console.log(testit([5, 5, 2, 2])); // expected 20
+console.log(testit([6, 0, 7, 5])); // expected 30
+console.log(testit([3, 2, 9, 7])); // expected 39
+console.log(testit([7, 0, 3, 6])); // expected 42
+console.log(testit([9, 3, 0, 7])); // expected 63
