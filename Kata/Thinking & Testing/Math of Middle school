@@ -1,0 +1,35 @@
+/*
+Тесты:
+
+//Tips:Hard Version of Thinking & Testing 07
+Test.assertSimilar(testit([0,0,0,0],[0,0,0,0]), [0,0,0,0], "")
+Test.assertSimilar(testit([22,88,0,0],[0,100,0,100]), [0,11000,0,0], "")
+Test.assertSimilar(testit([0,0,96,49],[86,0,53,0]), [0,0,10853,0], "")
+Test.assertSimilar(testit([0,0,83,88],[0,27,0,99]), [0,0,0,10953], "")
+//Click "Submit" try more testcase...
+*/
+
+function testit(a, b) {
+  return [
+    a[0] * b[0] + a[1] * b[2],
+    a[0] * b[1] + a[1] * b[3],
+    a[2] * b[0] + a[3] * b[2],
+    a[2] * b[1] + a[3] * b[3],
+  ];
+}
+
+console.log(testit([0, 0, 0, 0], [0, 0, 0, 0])); // expected [0, 0, 0, 0]
+console.log(testit([22, 88, 0, 0], [0, 100, 0, 100])); // expected [0, 11000, 0, 0]
+console.log(testit([0, 0, 96, 49], [86, 0, 53, 0])); // expected [0, 0, 10853, 0]
+console.log(testit([0, 0, 83, 88], [0, 27, 0, 99])); // expected [0, 0, 0, 10953]
+console.log(testit([11, 1, 19, 2], [19, 19, 12, 11])); // expected [221, 220, 385, 383]
+console.log(testit([3, 2, 0, 14], [11, 15, 13, 3])); // expected [59, 51, 182, 42]
+console.log(testit([13, 17, 6, 7], [18, 7, 14, 11])); // expected [472, 278, 206, 119]
+console.log(testit([0, 4, 15, 11], [16, 6, 17, 18])); // expected [68, 72, 427, 288]
+console.log(testit([16, 3, 12, 18], [11, 1, 17, 6])); // expected [227, 34, 438, 120]
+console.log(testit([0, 16, 3, 3], [7, 18, 9, 18])); // expected [144, 288, 48, 108]
+console.log(testit([5, 8, 18, 3], [18, 12, 16, 8])); // expected [218, 124, 372, 240]
+console.log(testit([17, 5, 13, 16], [6, 15, 1, 9])); // expected [107, 300, 94, 339]
+console.log(testit([1, 9, 17, 14], [7, 18, 18, 3])); // expected [169, 45, 371, 348]
+console.log(testit([17, 10, 15, 19], [3, 8, 16, 13])); // expected [211, 266, 349, 367]
+console.log(testit([5, 10, 14, 4], [19, 1, 1, 8])); // expected [105, 85, 270, 46]
