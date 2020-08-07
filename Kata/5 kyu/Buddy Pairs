@@ -50,90 +50,107 @@ buddy(10, 50) возвращает [48, 75]
 //   }
 
 // 2й способ:
-function buddy(start, limit) {
-  const divisorSums = {};
+// function buddy(start, limit) {
+//   const divisorSums = {};
 
-  for (let i = start; i < limit; i++) {
-    divisorSums[i] = !divisorSums[i] ? sum(getDivisors(i)) - 1 : divisorSums[i];
+//   for (let i = start; i < limit; i++) {
+//     divisorSums[i] = !divisorSums[i] ? sum(getDivisors(i)) - 1 : divisorSums[i];
 
-    let baseSum = divisorSums[i];
+//     let baseSum = divisorSums[i];
 
-    divisorSums[divisorSums[i]] = !divisorSums[divisorSums[i]]
-      ? sum(getDivisors(divisorSums[i])) - 1
-      : divisorSums[divisorSums[i]];
+//     divisorSums[divisorSums[i]] = !divisorSums[divisorSums[i]]
+//       ? sum(getDivisors(divisorSums[i])) - 1
+//       : divisorSums[divisorSums[i]];
 
-    let comparedSum = divisorSums[divisorSums[i]];
+//     let comparedSum = divisorSums[divisorSums[i]];
 
-    if (i === comparedSum && baseSum >= start) {
-      return [i, baseSum];
-    }
-  }
+//     if (i === comparedSum && baseSum >= start) {
+//       return [i, baseSum];
+//     }
+//   }
 
-  return "Nothing";
-}
+//   return "Nothing";
+// }
 
-function getDivisors(n) {
-  let divisors = [];
+// function getDivisors(n) {
+//   let divisors = [];
 
+//   for (let i = 2; i <= Math.sqrt(n); i++) {
+//     if (n % i === 0) {
+//       let upper = n / i;
+//       if (i === upper) {
+//         divisors.push(i);
+//       } else {
+//         divisors.push(i, upper);
+//       }
+//     }
+//   }
+
+//   return [1, ...divisors.sort((a, b) => a - b)];
+// }
+
+// function getDivisors2(n) {
+//   let divisors = [];
+
+//   let limit = n;
+
+//   for (let i = 2; i <= limit; i++) {
+//     if (n % i === 0) {
+//       limit = n / i;
+//       divisors.push(i, limit);
+//     }
+//   }
+
+//   console.log("divisors", [1, ...divisors.sort((a, b) => a - b)]);
+
+//   return [1, ...divisors.sort((a, b) => a - b)];
+// }
+
+// getDivisors(144);
+
+// function getDivisorsRecursive(n, a = []) {
+//   console.log("n", n);
+
+//   let limit = n;
+
+//   for (let i = 2; i < limit; i++) {
+//     console.log("i", i);
+//     if (n % i === 0) {
+//       console.log("i", i);
+//       console.log("n/i", n / i);
+
+//       limit = n / i;
+//       return a.concat(
+//         i,
+//         getDivisorsRecursive(i),
+//         limit,
+//         getDivisorsRecursive(limit)
+//       );
+//     }
+//   }
+
+//   return a.concat([1]);
+// }
+
+// function sum(a) {
+//   return a.reduce((a, b) => a + b, 0);
+// }
+
+// 3й способ:
+const s = (n) => {
+  let res = 0;
   for (let i = 2; i <= Math.sqrt(n); i++) {
-    if (n % i === 0) {
-      let upper = n / i;
-      if (i === upper) {
-        divisors.push(i);
-      } else {
-        divisors.push(i, upper);
-      }
-    }
+    if (n % i === 0) i === n / i ? (res += i) : (res += i + n / i);
   }
+  return res;
+};
 
-  return [1, ...divisors.sort((a, b) => a - b)];
-}
-
-function getDivisors2(n) {
-  let divisors = [];
-
-  let limit = n;
-
-  for (let i = 2; i <= limit; i++) {
-    if (n % i === 0) {
-      limit = n / i;
-      divisors.push(i, limit);
-    }
+function buddy(start, limit) {
+  for (let i = start; i <= limit; i++) {
+    let si = s(i);
+    if (i < si && i === s(si)) return [i, si];
   }
-
-  console.log("divisors", [1, ...divisors.sort((a, b) => a - b)]);
-
-  return [1, ...divisors.sort((a, b) => a - b)];
-}
-
-getDivisors(144);
-
-function getDivisorsRecursive(n, a = []) {
-  console.log("n", n);
-
-  let limit = n;
-
-  for (let i = 2; i < limit; i++) {
-    console.log("i", i);
-    if (n % i === 0) {
-      console.log("i", i);
-      console.log("n/i", n / i);
-
-      limit = n / i;
-      return a.concat(
-        i,
-        getDivisorsRecursive(i),
-        limit,
-        getDivisorsRecursive(limit)
-      );
-    }
-  }
-
-  return a.concat([1]);
-}
-
-function sum(a) {
-  return a.reduce((a, b) => a + b, 0);
+  return "Nothing";
 }
 
 console.log(buddy(10, 50)); // expected [48, 75]
