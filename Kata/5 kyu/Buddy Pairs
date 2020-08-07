@@ -1,0 +1,143 @@
+/*
+Задача:
+Вы знаете, что такое делители числа. Делители положительного целого числа n называются правильными, если вы рассматриваете только делители, кроме самого n. В нижеследующем описании делители будут означать собственные делители. Например, для 100 это 1, 2, 4, 5, 10, 20, 25 и 50.
+
+Пусть s(n) будет суммой этих собственных делителей числа n. Назовите два положительных целых числа так, чтобы сумма правильных делителей каждого числа была на единицу больше, чем другое число:
+
+(n, m) - нужная пара чисел, если s(m) = n + 1 и s(n) = m + 1
+
+Например 48 и 75 - это такая пара:
+
+Делители 48: 1, 2, 3, 4, 6, 8, 12, 16, 24 -> сумма: 76 = 75 + 1
+Делители 75: 1, 3, 5, 15, 25 -> сумма: 49 = 48 + 1
+
+Учитывая два положительных целых числа start и limit, функция buddy(start, limit) должна возвращать первую пару (n m) пар чисел, так что n (положительное целое число) находится между start (включительно) и limit (включительно); m может быть больше предела и должно быть больше n
+
+Если нет пары чисел, удовлетворяющих условиям, то верните «Nothing».
+
+Примеры:
+
+buddy(10, 50) возвращает [48, 75]
+*/
+
+// 1й способ:
+// function buddy(start, limit) {
+//     let sumFirst = 0;
+//     let sumSecond = 0;
+
+//     for (let i = start; i <= limit; i++) {
+//       for (let j = 1; j < i; j++) {
+//         if (i % j == 0) sumFirst += j;
+//       }
+
+//       //console.log(`sumFirst = ${sumFirst}`);
+
+//       for (let k = 1; k < sumFirst - 1; k++) {
+//         if ((sumFirst - 1) % k == 0) sumSecond += k;
+//         //console.log(`sumSecond = ${sumSecond}`);
+//       }
+
+//       //console.log(`sumSecond = ${sumSecond}`);
+
+//       //console.log(`i = ${i}`);
+//       if (sumSecond == i + 1) return [i, sumFirst - 1];
+
+//       sumFirst = 0;
+//       sumSecond = 0;
+//     }
+
+//     return "Nothing";
+//   }
+
+// 2й способ:
+function buddy(start, limit) {
+  const divisorSums = {};
+
+  for (let i = start; i < limit; i++) {
+    divisorSums[i] = !divisorSums[i] ? sum(getDivisors(i)) - 1 : divisorSums[i];
+
+    let baseSum = divisorSums[i];
+
+    divisorSums[divisorSums[i]] = !divisorSums[divisorSums[i]]
+      ? sum(getDivisors(divisorSums[i])) - 1
+      : divisorSums[divisorSums[i]];
+
+    let comparedSum = divisorSums[divisorSums[i]];
+
+    if (i === comparedSum && baseSum >= start) {
+      return [i, baseSum];
+    }
+  }
+
+  return "Nothing";
+}
+
+function getDivisors(n) {
+  let divisors = [];
+
+  for (let i = 2; i <= Math.sqrt(n); i++) {
+    if (n % i === 0) {
+      let upper = n / i;
+      if (i === upper) {
+        divisors.push(i);
+      } else {
+        divisors.push(i, upper);
+      }
+    }
+  }
+
+  return [1, ...divisors.sort((a, b) => a - b)];
+}
+
+function getDivisors2(n) {
+  let divisors = [];
+
+  let limit = n;
+
+  for (let i = 2; i <= limit; i++) {
+    if (n % i === 0) {
+      limit = n / i;
+      divisors.push(i, limit);
+    }
+  }
+
+  console.log("divisors", [1, ...divisors.sort((a, b) => a - b)]);
+
+  return [1, ...divisors.sort((a, b) => a - b)];
+}
+
+getDivisors(144);
+
+function getDivisorsRecursive(n, a = []) {
+  console.log("n", n);
+
+  let limit = n;
+
+  for (let i = 2; i < limit; i++) {
+    console.log("i", i);
+    if (n % i === 0) {
+      console.log("i", i);
+      console.log("n/i", n / i);
+
+      limit = n / i;
+      return a.concat(
+        i,
+        getDivisorsRecursive(i),
+        limit,
+        getDivisorsRecursive(limit)
+      );
+    }
+  }
+
+  return a.concat([1]);
+}
+
+function sum(a) {
+  return a.reduce((a, b) => a + b, 0);
+}
+
+console.log(buddy(10, 50)); // expected [48, 75]
+console.log(buddy(23, 4669)); // expected [48, 75]
+console.log(buddy(4952, 6539)); // expected [5775, 6128]
+console.log(buddy(381, 4318)); // expected [1050, 1925]
+console.log(buddy(2382, 3679)); // expected "Nothing"
