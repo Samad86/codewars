@@ -1,0 +1,52 @@
+/*
+Для 3 массивов целых чисел верните сумму элементов, общих для всех 3 массивов.
+
+Например:
+
+common ([1,2,3], [5,3,2], [7,3,2]) = 5, потому что 2 и 3 являются общими для всех 3 массивов
+common ([1,2,2,3], [5,3,2,2], [7,3,2,2]) = 7, потому что 2,2 и 3 являются общими в 3 массивах
+*/
+
+// 1й способ:
+// function common(a, b, c) {
+//   let arr = [];
+//   let res = [];
+
+//   for (let i = 0; i < a.length; i++) {
+//     for (let j = 0; j < b.length; j++) {
+//       if (a[i] == b[j]) {
+//         arr.push(a[i]);
+//         b.splice(j, 1);
+//         break;
+//       }
+//     }
+//   }
+
+//   for (let i = 0; i < arr.length; i++) {
+//     for (let j = 0; j < c.length; j++) {
+//       if (arr[i] == c[j]) {
+//         res.push(arr[i]);
+//         c.splice(j, 1);
+//         break;
+//       }
+//     }
+//   }
+
+//   return res.reduce((sum, i) => sum + i, 0);
+// }
+
+// 2й способ:
+function common(a, b, c) {
+  return a.filter((item) => {
+      let [B, C] = [b, c].map((elem) => elem.indexOf(item));
+      if (B > -1 && C > -1) {
+        b.splice(B, 1);
+        c.splice(C, 1);
+        return true;
+      }
+    })
+    .reduce((x, y) => x + y, 0);
+}
+
+console.log(common([1, 2, 3], [5, 3, 2], [7, 3, 2])); // expected 5
+console.log(common([1, 2, 2, 3], [5, 3, 2, 2], [7, 3, 2, 2])); // expected 7
