@@ -1,0 +1,30 @@
+/*
+На столе Боба несколько камней в ряд, каждый из которых может быть красным, зеленым или синим, обозначенным символами R, G и B.
+
+Помогите Бобу найти минимальное количество камней, которое ему нужно убрать со стола, чтобы камни в каждой паре соседних камней были разных цветов.
+
+Примеры:
+
+«RGBRGBRGGB» => 1
+"RGGRGBBRGRR" => 3
+"RRRRGGGGBBBB" => 9
+*/
+
+function solve(stones) {
+  let count = 0;
+
+  for (let i = 0; i < stones.length - 1; i++) {
+    if (stones[i] === stones[i + 1]) count++;
+  }
+
+  return count;
+}
+
+console.log(solve("RRGGBB")); // expected 3
+console.log(solve("RGBRGB")); // expected 0
+console.log(solve("BGRBBGGBRRR")); // expected 4
+console.log(solve("GBBBGGRRGRB")); // expected 4
+console.log(solve("GBRGGRBBBBRRGGGB")); // expected 7
+console.log(solve("RGBRGBRGGB")); // expected 1
+console.log(solve("RGGRGBBRGRR")); // expected 3
+console.log(solve("RRRRGGGGBBBB")); // expected 9
