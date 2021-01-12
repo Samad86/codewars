@@ -1,0 +1,59 @@
+/*
+Я хочу знать наибольшую длину последовательных элементов X в Y. Я предоставлю вам элемент (Y) и ключ для поиска (X). Верните длину самого длинного сегмента последовательных ключей (X) в Y.
+
+Правила:
+Элемент будет либо целочисленным, либо строковым типом данных.
+Ключ будет целочисленным или строковым типом данных.
+Возвращаемое значение будет целочисленным типом данных.
+Если ключ отсутствует в номере, верните 0.
+
+Пример 1:
+items = 90000;
+ключ = 0;
+возвращаемое значение: 4;
+
+Пример 2:
+items = "abcdaaadse";
+ключ = "а";
+возвращаемое значение: 3;
+*/
+
+// 1й способ:
+// function getConsectiveItems(items, key) {
+//   items = items.toString().split("");
+//   key = key.toString();
+//   let output = [];
+//   let count = 1;
+
+//   let res = items.reduce((res, elem, i) => {
+//     if (elem === key) res.push(i);
+//     return res;
+//   }, []);
+
+//   if (res.length == 0) return 0;
+
+//   for (let i = 0; i < res.length; i++) {
+//     if (res[i] + 1 == res[i + 1]) {
+//       count++;
+//     } else {
+//       output.push(count);
+//       count = 1;
+//     }
+//   }
+
+//   return Math.max(...output);
+// }
+
+// 2й способ:
+function getConsectiveItems(items, key) {
+  let symbol = new RegExp(key.toString() + "*", "g");
+  return items
+    .toString()
+    .match(symbol)
+    .reduce((a, b) => (a.length > b.length ? a : b)).length;
+}
+
+console.log(getConsectiveItems(90000, 0)); // expected 4
+console.log(getConsectiveItems("abcdaaadse", "a")); // expected 3
+console.log(getConsectiveItems("ascasdaiiiasdacasdiiiiicasdasdiiiiiiiiiiisdasdasdiii", "i")); // expected 11
+console.log(getConsectiveItems(18037634053, 2)); // expected 0
