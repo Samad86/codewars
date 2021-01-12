@@ -1,0 +1,60 @@
+/*
+Я дам вам целое число (N) и строку. Разбейте строку на как можно больше подстрок N без пробелов. Если есть оставшиеся символы, включите и их.
+
+Пример:
+N = 5;
+String = "This is an example string";
+
+Возвращаемое значение:
+Thisi
+sanex
+ample
+strin
+g
+
+Возвращаемое значение в виде строки: "Thisi" + "\n" + "sanex" + "\n" + "ample" + "\n" + "strin" + "\n" + "g"
+*/
+
+// 1й способ:
+// function stringBreakers(n, string) {
+//   let arr = string.split(" ").join("").split("");
+//   let res = [];
+//   let count = 0;
+
+//   for (let i = 0; i < arr.length; i++) {
+//     res.push(arr[i]);
+//     count++;
+//     if (count == n && i != arr.length - 1) {
+//       res.push("\n");
+//       count = 0;
+//     }
+//   }
+
+//   return res.join("");
+// }
+
+// 2й способ:
+// function stringBreakers(n, string) {
+//   string = string.replace(/\s/g, "");
+//   let res = [];
+
+//   for (let i = 0; i < string.length; i += n) {
+//     res.push(string.substr(i, n));
+//   }
+
+//   return res.join("\n");
+// }
+
+// 3й способ:
+function stringBreakers(n, string) {
+  return string
+    .replace(/\s/g, "")
+    .replace(new RegExp(".{" + n + "}", "g"), "$&\n")
+    .trim();
+}
+
+console.log(stringBreakers(5, "This is an example string")); // expected "Thisi" + "\n" + "sanex" + "\n" + "ample" + "\n" + "strin" + "\n" + "g"
+console.log(stringBreakers(1, "974yvtrao8i8m99b28uwdcfkitjhi19gou68udvufp0rig9")); // expected "9" + "\n" + "7" + "\n" +"4" + "\n" + "y" + "\n" + "v" +"\n" +"t" +"\n" + "r" + "\n" + "a" +"\n" + "o" + "\n" + "8" + "\n" + "i" + "\n" + "8" + "\n" + "m" + "\n" + "9" + "\n" + "9" + "\n" + "b" + "\n" + "2" + "\n" + "8" + "\n" + "u" + "\n" + "w" + "\n" + "d" + "\n" + "c" + "\n" + "f" + "\n" + "k" + "\n" + "i" + "\n" + "t" + "\n" + "j" + "\n" + "h" + "\n" + "i" + "\n" + "1" + "\n" + "9" + "\n" + "g" + "\n" + "o" + "\n" + "u" + "\n" + "6" + "\n" + "8" + "\n" + "u" + "\n" + "d" + "\n" + "v" + "\n" + "u" + "\n" + "f" + "\n" + "p" + "\n" + "0" + "\n" + "r" + "\n" + "i" + "\n" + "g" + "\n" + "9"
+console.log(stringBreakers(3, "zo2dink0dth7zoew45mm2we2irs2dwj50b9u6jln8r2sy3ivd")); // expected "zo2" + "\n" + "din" + "\n" + "k0d" + "\n" + "th7"+ "\n" + "zoe" + "\n" + "w45" + "\n" + "mm2" + "\n" + "we2" + "\n" + "irs" + "\n" + "2dw" + "\n" + "j50" + "\n" + "b9u" + "\n" + "6jl" + "\n" + "n8r" + "\n" + "2sy" + "\n" + "3iv" + "\n" + "d"
+console.log(stringBreakers(9, "6dahrljiqik7ongkgndcpdc4a6ftlcab7h8452ri1mfrfqck")); // expected "6dahrljiq" + "\n" + "ik7ongkgn" + "\n" + "dcpdc4a6f" + "\n" + "tlcab7h84" + "\n" + "52ri1mfrf" + "\n" + "qck"
+console.log(stringBreakers(6, "yvz8cifv0psk6db0dnb6kh8mmj10hq0okgyg89rrnj7nde9t")); // expected "yvz8ci" + "\n" + "fv0psk" + "\n" + "6db0dn" + "\n" + "b6kh8m" + "\n" + "mj10hq" + "\n" + "0okgyg" + "\n" + "89rrnj" + "\n" + "7nde9t"
