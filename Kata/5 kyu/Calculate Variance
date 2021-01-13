@@ -1,0 +1,38 @@
+/*
+Напишите функцию, которая будет принимать последовательность чисел и вычислять дисперсию для этой последовательности.
+
+Дисперсия для набора чисел находится путем вычитания среднего из каждого значения, возведения результатов в квадрат, сложения их всех и деления на количество элементов.
+
+Например, в псевдокоде, чтобы вычислить дисперсию для [1, 2, 2, 3].
+
+mean = (1 + 2 + 2 + 3) / 4
+=> 2
+
+variance = ((1-2) ^ 2 + (2-2) ^ 2 + (2-2) ^ 2 + (3-2) ^ 2) / 4
+=> 0,5
+Результаты проверяются после округления до 4 знаков после запятой с использованием метода toFixed в Javascript.
+*/
+
+// 1й способ:
+// let variance = function (numbers) {
+//   let res = 0;
+//   let mean = numbers.reduce((acc, elem) => acc + elem, 0) / numbers.length;
+//   for (let i = 0; i < numbers.length; i++) {
+//     res += Math.pow(numbers[i] - mean, 2);
+//   }
+//   return +(res / numbers.length).toFixed(4);
+// };
+
+// 2й способ:
+let variance = function (numbers) {
+  let mean = numbers.reduce((acc, elem) => acc + elem, 0) / numbers.length;
+  return +(
+    numbers.reduce((acc, elem) => acc + Math.pow(elem - mean, 2), 0) /
+    numbers.length
+  ).toFixed(4);
+};
+
+console.log(variance([1, 2, 2, 3])); // expected 0.5
+console.log(variance([-10, 0, 10, 20, 30])); // expected 200
+console.log(variance([8, 9, 10, 11, 12])); // expected 2
+console.log(variance([1.5, 2.5, 4, 2, 1, 1])); // expected 1.0833
