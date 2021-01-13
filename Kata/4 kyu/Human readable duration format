@@ -1,0 +1,81 @@
+/*
+Чтобы выполнить эту ката, ваша задача - написать функцию, которая форматирует продолжительность, выраженную в количестве секунд, удобным для человека способом.
+
+Функция должна принимать неотрицательное целое число. Если он равен нулю, он просто возвращает «now». В противном случае продолжительность выражается как комбинация лет, дней, часов, минут и секунд.
+
+Это намного проще понять на примере:
+
+formatDuration(62) // возвращает «1 minute and 2 seconds»
+formatDuration(3662) // возвращает «1 hour, 1 minute and 2 seconds»
+
+Для этой ката год составляет 365 дней, а день - 24 часа.
+Обратите внимание, что пробелы важны.
+
+Подробные правила:
+Результирующее выражение состоит из таких компонентов, как 4 секунды, 1 год и т. д. Как правило, положительное целое число и одна из допустимых единиц времени разделены пробелом. Единица времени используется во множественном числе, если целое число больше 1.
+
+Компоненты разделяются запятой и пробелом (", "). За исключением последнего компонента, который разделен "and ", как если бы он был написан на английском языке.
+
+Более значимые единицы времени расположены раньше, чем наименее значимые. Следовательно, 1 секунда и 1 год - неправильно, а 1 год и 1 секунда - правильно.
+
+У разных компонентов разная единица времени. Таким образом, нет повторяющихся единиц, таких как 5 секунд и 1 секунда.
+
+Компонент вообще не появится, если его значение равно 0. Следовательно, 1 минута и 0 секунд - неправильно, а 1 минута - правильно.
+
+Единица времени должна использоваться «как можно больше». Это означает, что функция должна возвращать не 61 секунду, а 1 минуту и 1 секунду. Формально продолжительность, указанная в компоненте, не должна быть больше любой действительной более значимой единицы времени.
+*/
+
+function formatDuration(seconds) {
+  let time = {
+    year: 365 * 24 * 60 * 60 * 1,
+    day: 24 * 60 * 60 * 1,
+    hour: 60 * 60 * 1,
+    minute: 60 * 1,
+    second: 1,
+  };
+  let res = [];
+
+  if (seconds == 0) return "now";
+
+  let years = Math.floor(seconds / time.year);
+  if (years > 0) {
+    res.push(years + " year" + (years == 1 ? "" : "s"));
+    seconds = seconds % time.year;
+  }
+
+  let days = Math.floor(seconds / time.day);
+  if (days > 0) {
+    res.push(days + " day" + (days == 1 ? "" : "s"));
+    seconds = seconds % time.day;
+  }
+
+  let hours = Math.floor(seconds / time.hour);
+  if (hours > 0) {
+    res.push(hours + " hour" + (hours == 1 ? "" : "s"));
+    seconds = seconds % time.hour;
+  }
+
+  let minutes = Math.floor(seconds / time.minute);
+  if (minutes > 0) {
+    res.push(minutes + " minute" + (minutes == 1 ? "" : "s"));
+    seconds = seconds % time.minute;
+  }
+
+  if (seconds > 0) {
+    res.push(seconds + " second" + (seconds == 1 ? "" : "s"));
+  }
+
+  if (res.length > 1) {
+    let last = res.pop();
+    return res.join(", ") + " and " + last;
+  } else {
+    return res[0];
+  }
+}
+
+console.log(formatDuration(0)); // expected "now"
+console.log(formatDuration(1)); // expected "1 second"
+console.log(formatDuration(62)); // expected "1 minute and 2 seconds"
+console.log(formatDuration(120)); // expected "2 minutes"
+console.log(formatDuration(3600)); // expected "1 hour"
+console.log(formatDuration(3662)); // expected "1 hour, 1 minute and 2 seconds"
