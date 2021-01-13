@@ -1,0 +1,36 @@
+/*
+Напишите алгоритм, который берет массив и перемещает все нули в конец, сохраняя порядок других элементов.
+
+moveZeros([false, 1, 0, 1, 2, 0, 1, 3, «a»]) // возвращает [false, 1, 1, 2, 1, 3, «a», 0, 0]
+*/
+
+// 1й способ:
+// let moveZeros = function (arr) {
+//   let res = [];
+//   let arrZeros = [];
+//   for (let i = 0; i < arr.length; i++) {
+//     if (arr[i] === 0) {
+//       arrZeros.push(arr[i]);
+//       continue;
+//     }
+//     res.push(arr[i]);
+//   }
+//   return res.concat(arrZeros);
+// };
+
+// 2й способ:
+// let moveZeros = function (arr) {
+//   let res = arr.filter((elem) => elem !== 0);
+//   let arrZeros = arr.filter((elem) => elem === 0);
+//   return res.concat(arrZeros);
+// };
+
+// 3й способ:
+let moveZeros = function (arr) {
+  return arr
+    .filter((elem) => elem !== 0)
+    .concat(arr.filter((elem) => elem === 0));
+};
+
+console.log(moveZeros([1, 2, 0, 1, 0, 1, 0, 3, 0, 1])); // expected [1, 2, 1, 1, 3, 1, 0, 0, 0, 0]
+console.log(moveZeros([false, 1, 0, 1, 2, 0, 1, 3, "a"])); // expected [false, 1, 1, 2, 1, 3, "a", 0, 0]
