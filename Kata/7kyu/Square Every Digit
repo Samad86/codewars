@@ -1,0 +1,14 @@
+/*
+В этом ката вас просят возвести в квадрат каждую цифру числа и соединить их.
+
+Например, если мы запустим 9119 через функцию, выйдет 811181, потому что 9^2 - это 81, а 1^2 - это 1.
+
+Примечание: функция принимает целое число и возвращает целое число.
+*/
+
+function squareDigits(num) {
+  return Number(num.toString().split('').map((elem) => +Math.pow(elem, 2)).join(''));
+}
+
+console.log(squareDigits(9119)); // expected 811181
+console.log(squareDigits(3212)); // expected 9414
