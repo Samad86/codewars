@@ -1,0 +1,27 @@
+/*
+Завершите функцию, которая возвращает массив длины n, начиная с заданного числа x и квадратов предыдущего числа. Если n отрицательно или равно нулю, вернуть пустой массив / список.
+
+Примеры:
+
+2, 5 -> [2, 4, 16, 256, 65536]
+3, 3 -> [3, 9, 81]
+*/
+
+function squares(x, n) {
+  let res = [x];
+
+  if (n <= 0) return [];
+
+  for (let i = 1; i < n; i++) {
+    res.push(res[i - 1] ** 2);
+  }
+
+  return res;
+}
+
+console.log(squares(2, 5)); // expected [2, 4, 16, 256, 65536]
+console.log(squares(3, 3)); // expected [3, 9, 81]
+console.log(squares(5, 3)); // expected [5, 25, 625]
+console.log(squares(10, 4)); // expected [10, 100, 10000, 100000000]
+console.log(squares(2, 0)); // expected []
+console.log(squares(2, -5)); // expected []
