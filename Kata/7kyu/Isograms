@@ -1,0 +1,27 @@
+/*
+Изограмма - это слово, в котором нет повторяющихся букв, последовательных или непоследовательных. Реализуйте функцию, которая определяет, является ли строка, содержащая только буквы, изограммой. Предположим, что пустая строка является изограммой. Игнорировать регистр букв.
+
+isIsogram("Dermatoglyphics") == true
+isIsogram("aba") == false
+isIsogram("moOse") == false // -- игнорировать регистр букв
+*/
+
+function isIsogram(str) {
+  str = str.toLowerCase();
+  let chars = str.split('').map((elem) => elem.toLowerCase());
+
+  for (let i = 0; i < str.length; i++) {
+    for (let j = i + 1; j < chars.length; j++) {
+      if (str[i] === chars[j]) return false;
+    }
+  }
+
+  return true;
+}
+
+console.log(isIsogram('Dermatoglyphics')); // expected true
+console.log(isIsogram('isogram')); // expected true
+console.log(isIsogram('aba')); // expected false
+console.log(isIsogram('moOse')); // expected false
+console.log(isIsogram('isIsogram')); // expected false
+console.log(isIsogram('')); // expected true
