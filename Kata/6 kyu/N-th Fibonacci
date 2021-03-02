@@ -1,0 +1,38 @@
+/*
+В целом я люблю числа Фибоначчи, но должен признать, что одни люблю больше, чем другие.
+
+Я хотел бы, чтобы вы написали мне функцию, которая при задании числа (n) возвращает n-е число в последовательности Фибоначчи.
+
+Например:
+
+nthFibo(4) == 2
+Потому что 2 - это 4-е число в последовательности Фибоначчи.
+
+Для справки: первые 2 числа в последовательности Фибоначчи - это 0 и 1, а каждое последующее число является суммой двух предыдущих.
+*/
+
+// 1ё способ:
+/*
+function nthFibo(n) {
+  let [prev, curr] = [0, 1];
+
+  for (let i = 1; i < n; i++) {
+    [prev, curr] = [curr, prev + curr];
+  }
+
+  return prev;
+}
+*/
+
+// 2й способ:
+function nthFibo(n) {
+  if (n == 1) return 0;
+  if (n == 2) return 1;
+
+  return n <= 1 ? n : nthFibo(n - 1) + nthFibo(n - 2);
+}
+
+console.log(nthFibo(1)); // expected 0
+console.log(nthFibo(2)); // expected 1
+console.log(nthFibo(3)); // expected 1
+console.log(nthFibo(4)); // expected 2
