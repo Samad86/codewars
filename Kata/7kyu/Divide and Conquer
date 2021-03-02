@@ -1,0 +1,16 @@
+/*
+Учитывая смешанный массив числовых и строковых представлений целых чисел, сложите строковые целые числа и вычтите это из общего количества целых чисел, не являющихся строковыми.
+
+Возврат в виде числа.
+*/
+
+function divCon(x) {
+  return (
+    x.filter((elem) => typeof elem === 'number').reduce((acc, elem) => acc + elem, 0) -
+    x.filter((elem) => typeof elem === 'string').reduce((acc, elem) => acc + +elem, 0)
+  );
+}
+
+console.log(divCon([9, 3, '7', '3'])); // expected 2
+console.log(divCon(['5', '0', 9, 3, 2, 1, '9', 6, 7])); // expected 14
+console.log(divCon(['3', 6, 6, 0, '5', 8, 5, '6', 2, '0'])); // expected 13
