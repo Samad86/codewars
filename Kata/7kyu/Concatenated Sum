@@ -1,0 +1,39 @@
+/*
+Число 198 имеет свойство 198 = 11 + 99 + 88, т. е. если каждая из его цифр объединяется дважды, а затем суммируется, результатом будет равен исходному числу. Оказывается, 198 - единственное число с таким свойством. Однако это свойство можно обобщить так, чтобы каждая цифра объединялась n раз, а затем суммировалась.
+
+Например:
+
+исходное число = 2997, n = 3
+2997 = 222 + 999 + 999 + 777, и здесь каждая цифра объединяется 3 раза.
+
+исходное число = -2997, n = 3
+
+-2997 = -222-999-999-777, и здесь каждая цифра объединяется 3 раза.
+
+Напишите функцию checkConcatenatedSum, которая проверяет, имеет ли число это обобщенное свойство.
+*/
+
+function checkConcatenatedSum(number, n) {
+  let arr = Math.abs(number).toString().split('');
+  let concatNumArr = [];
+  let count = 1;
+
+  for (let i = 0; i < arr.length; i++) {
+    concatNumArr[i] = arr[i].split('');
+
+    while (count < n) {
+      concatNumArr[i] += arr[i];
+      count++;
+    }
+
+    count = 1;
+  }
+
+  if (number < 0) concatNumArr = concatNumArr.map((elem) => -elem);
+
+  return concatNumArr.reduce((acc, elem) => acc + +elem, 0) == number ? true : false;
+}
+
+console.log(checkConcatenatedSum(198, 2)); // expected true
+console.log(checkConcatenatedSum(2997, 3)); // expected true
+console.log(checkConcatenatedSum(-2997, 3)); // expected true
