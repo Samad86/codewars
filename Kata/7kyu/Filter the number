@@ -1,0 +1,28 @@
+/*
+О нет! Число перепутано с текстом. Ваша цель - получить число из текста. Можете ли вы вернуть число в исходное состояние?
+
+Ваша задача - вернуть число из строки.
+
+Подробности:
+Вам будет предоставлена строка из смешанных цифр и букв, вы должны вернуть все числа в этой строке в том порядке, в котором они встречаются.
+ */
+
+// 1й способ:
+/*
+let FilterString = function (value) {
+  return value
+    .split('')
+    .filter((elem) => isFinite(elem))
+    .join('');
+};
+*/
+
+// 2й способ:
+let FilterString = function (value) {
+  return parseInt(value.replace(/[^\d]/g, ''));
+};
+
+console.log(FilterString('123')); // expected 123
+console.log(FilterString('a1b2c3')); // expected 123
+console.log(FilterString('aa1bb2cc3dd')); // expected 123
+console.log(FilterString('e9ef45da2e92142f72db278a540eb219')); // expected 94529214272278540219
