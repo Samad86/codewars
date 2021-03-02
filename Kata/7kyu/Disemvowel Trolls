@@ -1,0 +1,78 @@
+/*
+Тролли атакуют ваш раздел комментариев!
+
+Обычный способ справиться с этой ситуацией - удалить все гласные из комментариев троллей, нейтрализуя угрозу.
+
+Ваша задача - написать функцию, которая принимает строку и возвращает новую строку с удаленными гласными.
+
+Например, строка «This website is for losers LOL!» станет "Ths wbst s fr lsrs LL!".
+
+Примечание: для этого ката "y" не считается гласным.
+*/
+
+// 1й способ:
+/*
+function disemvowel(str) {
+  let res = [];
+
+  for (let i = 0; i < str.length; i++) {
+    if (
+      str[i] === 'A' ||
+      str[i] === 'E' ||
+      str[i] === 'I' ||
+      str[i] === 'O' ||
+      str[i] === 'U' ||
+      str[i] === 'a' ||
+      str[i] === 'e' ||
+      str[i] === 'i' ||
+      str[i] === 'o' ||
+      str[i] === 'u'
+    )
+      continue;
+    res.push(str[i]);
+  }
+
+  return res.join('');
+}
+*/
+
+// 2й способ:
+/*
+function disemvowel(str) {
+  return str
+    .split('')
+    .filter(
+      (elem) =>
+        elem !== 'A' &&
+        elem !== 'E' &&
+        elem !== 'I' &&
+        elem !== 'O' &&
+        elem !== 'U' &&
+        elem !== 'a' &&
+        elem !== 'e' &&
+        elem !== 'i' &&
+        elem !== 'o' &&
+        elem !== 'u',
+    )
+    .join('');
+}
+*/
+
+// 3й способ:
+/*
+function disemvowel(str) {
+  let vowels = ['a', 'e', 'i', 'o', 'u'];
+
+  return str
+    .split('')
+    .filter((elem) => vowels.indexOf(elem.toLowerCase()) == -1)
+    .join('');
+}
+*/
+
+// 4й способ:
+function disemvowel(str) {
+  return str.replace(/[aeiou]/gi, '');
+}
+
+console.log(disemvowel('This website is for losers LOL!')); // expected "Ths wbst s fr lsrs LL!"
