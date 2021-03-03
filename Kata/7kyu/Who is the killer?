@@ -16,6 +16,7 @@
 верните имя одного убийцы, в нашем случае «Джеймс», потому что он единственный человек, который видел и 'Lucas', и 'Bill'.
 */
 
+// 1й способ:
 /*
 function killer(suspectInfo, dead) {
   let data = Object.entries(suspectInfo);
@@ -38,6 +39,7 @@ function killer(suspectInfo, dead) {
 }
 */
 
+// 2й способ:
 function killer(suspectInfo, dead) {
   for (let name in suspectInfo) {
     let temp = suspectInfo[name].filter((victim) => dead.includes(victim));
