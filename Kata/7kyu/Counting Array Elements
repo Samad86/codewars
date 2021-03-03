@@ -1,0 +1,27 @@
+/*
+Напишите функцию, которая принимает массив и подсчитывает количество каждого присутствующего уникального элемента.
+
+count(['james', 'james', 'john']) 
+#=> { 'james': 2, 'john': 1}
+*/
+
+/*
+function count(array) {
+  let elements = {};
+
+  array.forEach((item) => {
+    elements[item] = (elements[item] || 0) + 1;
+  });
+
+  return elements;
+}
+*/
+
+function count(array) {
+  return array.reduce((acc, elem) => {
+    return acc[elem] ? acc[elem]++ : (acc[elem] = 1), acc;
+  }, {});
+}
+
+console.log(count(['a', 'a', 'b', 'b', 'b'])); // expected {'a': 2, 'b': 3}
+console.log(count(['james', 'james', 'john'])); // expected {'james': 2, 'john': 1}
