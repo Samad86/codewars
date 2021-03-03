@@ -1,0 +1,39 @@
+/*
+Создайте функцию fridayTheThirteens, которая принимает год начала и год окончания (включительно) и возвращает все даты, когда 13-е число месяца приходится на пятницу в заданном диапазоне лет.
+
+Возвращаемое значение должно быть строкой, в которой каждая дата разделена пробелом. Дата должна быть отформатирована как 9/13/2014, где месяцы не имеют начальных нулей и разделяются косой чертой.
+
+Если год окончания не указан, верните в пятницу только тринадцатые числа в течение года начала.
+
+Примеры:
+
+fridayTheThirteenths(1999, 2000) --> возвращает "8/13/1999 10/13/2000"
+  
+fridayTheThirteenths(2014, 2015) --> возвращает "6/13/2014 2/13/2015 3/13/2015 11/13/2015"
+  
+fridayTheThirteenths(2000) --> возвращает "10/13/2000"
+
+Это ката было разработано для использования встроенного объекта Date. Сроки часто бывают привередливыми, поэтому, хотя есть и другие способы получить правильные даты, я не могу гарантировать, что они сработают.
+*/
+
+function fridayTheThirteenths(start, end = start) {
+  let date = new Date(start, 0).getTime();
+  let res = [];
+
+  for (let i = 0; ; i++) {
+    date += 1000 * 60 * 60 * 24;
+    let fridayBlack = new Date(date).getDate();
+    let weekDay = new Date(date).getDay();
+
+    if (new Date(date).getFullYear() >= end + 1) break;
+
+    if (fridayBlack == 13 && weekDay == 5)
+      res.push(`${new Date(date).getMonth() + 1}/${fridayBlack}/${new Date(date).getFullYear()}`);
+  }
+
+  return res.join(` `);
+}
+
+console.log(fridayTheThirteenths(1999, 2000)); // expected "8/13/1999 10/13/2000"
+console.log(fridayTheThirteenths(2014, 2015)); // expected "6/13/2014 2/13/2015 3/13/2015 11/13/2015"
+console.log(fridayTheThirteenths(2000)); // expected "10/13/2000"
