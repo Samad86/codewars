@@ -1,0 +1,59 @@
+/*
+Некоторые люди были убиты!
+Вам удалось сузить круг подозреваемых до нескольких. К счастью, вы знаете каждого, кого подозреваемые видели в день убийства.
+
+Задача.
+Дан словарь со всеми именами подозреваемых и всех, кого они видели в тот день, который может выглядеть так:
+
+{'James': ['Jacob', 'Bill', 'Lucas'],
+ 'Johnny': ['David', 'Kyle', 'Lucas'],
+ 'Peter': ['Lucy', 'Kyle']}
+
+а также список имен погибших:
+
+['Lucas', 'Bill']
+
+верните имя одного убийцы, в нашем случае «Джеймс», потому что он единственный человек, который видел и 'Lucas', и 'Bill'.
+*/
+
+/*
+function killer(suspectInfo, dead) {
+  let data = Object.entries(suspectInfo);
+  let count = 0;
+
+  console.log(data);
+
+  for (let i = 0; i < data.length; i++) {
+    for (let k = 0; k < dead.length; k++) {
+      for (let j = 0; j < data[i][1].length; j++) {
+        if (dead[k] === data[i][1][j]) {
+          count++;
+        }
+      }
+      if (count == dead.length) return data[i][0];
+    }
+
+    count = 0;
+  }
+}
+*/
+
+function killer(suspectInfo, dead) {
+  for (let name in suspectInfo) {
+    let temp = suspectInfo[name].filter((victim) => dead.includes(victim));
+
+    if (temp.length === dead.length) return name;
+  }
+}
+
+console.log(
+  killer(
+    {
+      James: ['Jacob', 'Bill', 'Lucas'],
+      Johnny: ['David', 'Kyle', 'Lucas'],
+      Peter: ['Lucy', 'Kyle'],
+    },
+    ['Lucas', 'Bill'],
+  ),
+); // expected 'James'
+console.log(killer({ Brad: [], Megan: ['Ben', 'Kevin'], Finn: [] }, ['Ben'])); // expected 'Megan'
