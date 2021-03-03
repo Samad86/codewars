@@ -1,0 +1,25 @@
+/*
+Напишите простое регулярное выражение для проверки имени пользователя. Допустимые символы:
+- строчные буквы,
+- числа
+- нижние подчеркивания
+
+Длина должна быть от 4 до 16 символов (включая оба символа).
+*/
+
+function validateUsr(username) {
+  let res = /^([a-z0-9_]){4,16}$/g;
+
+  return res.test(username);
+}
+
+console.log(validateUsr('asddsa')); // expected true
+console.log(validateUsr('a')); // expected false
+console.log(validateUsr('Hass')); // expected false
+console.log(validateUsr('Hasd_12assssssasasasasasaasasasasas')); // expected false
+console.log(validateUsr('')); // expected false
+console.log(validateUsr('____')); // expected true
+console.log(validateUsr('012')); // expected false
+console.log(validateUsr('p1pp1')); // expected true
+console.log(validateUsr('asd43 34')); // expected false
+console.log(validateUsr('asd43_34')); // expected true
