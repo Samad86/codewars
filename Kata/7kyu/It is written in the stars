@@ -1,0 +1,97 @@
+/*
+Ваша задача на сегодня - завершить функцию starSign, найдя астрологический знак, учитывая данные о рождении как объект Date.
+Даты начала и окончания для знаков зодиака различаются в зависимости от ресурсов, поэтому мы будем использовать эту таблицу, чтобы получить согласованные результаты:
+
+Водолей ------- 21 января - 19 февраля
+Рыбы ---------- 20 февраля - 20 марта
+Овен ---------- 21 марта - 20 апреля
+Телец --------- 21 апреля - 21 мая
+Близнецы ------ 22 мая - 21 июня
+Рак ----------- 22 июня - 22 июля
+Лев ----------- 23 июля - 23 августа
+Дева ---------- 24 августа - 23 сентября
+Весы ---------- 24 сентября - 23 октября
+Скорпион ------ 24 октября - 22 ноября
+Стрелец ------- 23 ноября - 21 декабря
+Козерог ------- 22 декабря - 20 января
+
+Информация о тестах: 100 случайных тестов (диапазон дат с 1 января 1940 года по настоящее время).
+*/
+
+function starSign(date) {
+  if (
+    (date.getMonth() == 0 && date.getDate() >= 21) ||
+    (date.getMonth() == 1 && date.getDate() <= 19)
+  )
+    return 'Aquarius';
+
+  if (
+    (date.getMonth() == 1 && date.getDate() >= 20) ||
+    (date.getMonth() == 2 && date.getDate() <= 20)
+  )
+    return 'Pisces';
+
+  if (
+    (date.getMonth() == 2 && date.getDate() >= 21) ||
+    (date.getMonth() == 3 && date.getDate() <= 20)
+  )
+    return 'Aries';
+
+  if (
+    (date.getMonth() == 3 && date.getDate() >= 21) ||
+    (date.getMonth() == 4 && date.getDate() <= 21)
+  )
+    return 'Taurus';
+
+  if (
+    (date.getMonth() == 4 && date.getDate() >= 22) ||
+    (date.getMonth() == 5 && date.getDate() <= 21)
+  )
+    return 'Gemini';
+
+  if (
+    (date.getMonth() == 5 && date.getDate() >= 22) ||
+    (date.getMonth() == 6 && date.getDate() <= 22)
+  )
+    return 'Cancer';
+
+  if (
+    (date.getMonth() == 6 && date.getDate() >= 23) ||
+    (date.getMonth() == 7 && date.getDate() <= 23)
+  )
+    return 'Leo';
+
+  if (
+    (date.getMonth() == 7 && date.getDate() >= 24) ||
+    (date.getMonth() == 8 && date.getDate() <= 23)
+  )
+    return 'Virgo';
+
+  if (
+    (date.getMonth() == 8 && date.getDate() >= 24) ||
+    (date.getMonth() == 9 && date.getDate() <= 23)
+  )
+    return 'Libra';
+
+  if (
+    (date.getMonth() == 9 && date.getDate() >= 24) ||
+    (date.getMonth() == 10 && date.getDate() <= 22)
+  )
+    return 'Scorpio';
+
+  if (
+    (date.getMonth() == 10 && date.getDate() >= 23) ||
+    (date.getMonth() == 11 && date.getDate() <= 21)
+  )
+    return 'Sagittarius';
+
+  if (
+    (date.getMonth() == 11 && date.getDate() >= 22) ||
+    (date.getMonth() == 0 && date.getDate() <= 20)
+  )
+    return 'Capricorn';
+}
+
+console.log(starSign(new Date(1970, 5, 5))); // expected 'Gemini'
+console.log(starSign(new Date(2000, 1, 15))); // expected 'Aquarius'
+console.log(starSign(new Date(1987, 7, 23))); // expected 'Leo'
